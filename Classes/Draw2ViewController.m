@@ -7,11 +7,15 @@
 //
 
 #import "Draw2ViewController.h"
+#import "Constants.h"
 #import "Dot.h"
 #import "Tools.h"
-#define CONSTANT_DISTANCE 10.0f
+#import "Vector.h"
 
 @implementation Draw2ViewController
+
+#pragma mark -
+#pragma mark Properties
 
 @synthesize viewDraw;
 @synthesize predefinedGesture;
@@ -42,38 +46,89 @@
 
     userGesture = [[NSMutableArray alloc] init];
     
+    viewDraw = [[DrawView alloc] init];
+    viewDraw.delegate = self;
+    
 }
 
 /*
- *Gets Point
+ * Gets Point from the view and checks if it is in the gesture
  */
-- (void) userTouch:(Dot *)touch{
+- (void)userTouch:(Dot *)touch{
     //calculate distance to last saved point
-    BOOL newSample = false;
-    if(userGesture.count==0){
-        [userGesture addObject:touch];
-        newSample = true;
-    }
+    BOOL newSample = NO;
     
-    else{
+    if (userGesture.count == 0){
+    
+        [userGesture addObject:touch];
+        
+        if (userToTemplateDistance != nil) {
+            
+            [userToTemplateDistance release];
+            userToTemplateDistance = nil;
+            
+        }
+        
+        userToTemplateDistance = [[Vector alloc] init];
+        
+        Dot *templateFirstDot = [predefinedGesture objectAtIndex:0];
+        
+        userToTemplateDistance.x = templateFirstDot.x - touch.x;
+        userToTemplateDistance.y = templateFirstDot.y - touch.y;
+    
+    } else {
+        
         Dot *lastpoint = userGesture.lastObject;
         CGFloat distance = [Tools  distanceBetweenPoint:touch andPoint:lastpoint];
-        //if distance > 10, save next point [sampeling]
-        if (distance==CONSTANT_DISTANCE) {
-            [userGesture addObject:touch];
-            newSample = true;
-        }
-        if (distance>CONSTANT_DISTANCE) {
-            //compute intersection between circle and line between last and new dot
-            [userGesture addObject:touch];
-            newSample = true;
-        }
-    
-    
-    
-    // if new point was added compare saved point with next point in predefinded gesture 
-
         
+        //if distance > 10, save next point [sampeling]
+        if (distance == SAMPLING_DISTANCE) {
+        
+            [userGesture addObject:touch];
+            newSample = YES;
+        
+        } else if (distance > SAMPLING_DISTANCE) {
+            //compute intersection between circle and line between last and new dot
+            
+            Dot *sampleDot = [[Dot alloc] init];
+            sampleDot = [Tools dotInConstantDistanceFromDot:lastpoint toDot:touch];
+            
+            [userGesture addObject:touch];
+            newSample = true;
+        
+        }
+    
+    }
+
+    BOOL isError = NO;
+
+    //Checking the error
+    if (newSample) {
+
+        Dot *transDot = [[Dot alloc] init];
+        transDot.x = touch.x + userToTemplateDistance.x;
+        transDot.y = touch.y + userToTemplateDistance.y;
+
+        int index = [userGesture indexOfObject:touch];
+        Dot *tempDot = [[Dot alloc] init];
+        tempDot = [predefinedGesture objectAtIndex:index];
+        
+        CGFloat transToTempDistance = fabsf([Tools distanceBetweenPoint:transDot andPoint:tempDot]);
+        
+        if (transToTempDistance > ERROR_DISTANCE) {
+            isError = YES;
+        }
+        
+    }
+    
+    if (isError) {
+    
+        NSLog(@"The point (%f, %f) is out of the gesture", touch.x, touch.y);
+        
+    } else {
+    
+        NSLog(@"The point (%f, %f) is inside the gesture", touch.x, touch.y);
+
     }
 
 }
@@ -97,6 +152,13 @@
 
 
 - (void)dealloc {
+    
+    [predefinedGesture release];
+    predefinedGesture = nil;
+    
+    [userGesture release];
+    userGesture = nil;
+    
     [super dealloc];
 }
 

@@ -10,16 +10,24 @@
 
 @implementation DrawView
 
+#pragma mark -
+#pragma mark Properties
+
 @synthesize mX;
 @synthesize mY;
 @synthesize tangible;
 @synthesize angle;
 @synthesize delegate;
 
+#pragma mark -
+#pragma mark Touches operations
 
-
-
-
+/**
+ * Tells the receiver when one or more fingers touch down in a view or window.
+ *
+ * @param touches A set of UITouch instances that represent the touches for the starting phase of the event represented by event.
+ * @param event An object representing the event to which the touches belong.
+ */
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 
 	if(event.allTouches.count ==1){
@@ -41,7 +49,12 @@
 	}
 }
 
-
+/**
+ * Tells the receiver when one or more fingers associated with an event move within a view or window.
+ *
+ * @param touches A set of UITouch instances that represent the touches for the starting phase of the event represented by event.
+ * @param event An object representing the event to which the touches belong.
+ */
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
 	if(event.allTouches.count ==1){
 		

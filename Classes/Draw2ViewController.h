@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "DrawView.h"
+#import "Vector.h"
 
-@interface Draw2ViewController : UIViewController {
+@interface Draw2ViewController : UIViewController <DrawViewDelegate> {
     
     
 	IBOutlet DrawView *viewDraw;
@@ -23,11 +24,15 @@
      */
     NSMutableArray *userGesture;
     
+    /*
+     * User to template distance
+     */
+    Vector *userToTemplateDistance;
+    
 
 }
 
 @property (nonatomic, retain) IBOutlet DrawView *viewDraw;
-
 @property (readwrite, assign) NSArray *predefinedGesture;
 @property (readwrite, assign) NSMutableArray *userGesture;
 

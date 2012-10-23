@@ -13,7 +13,7 @@
 /**
  * Defines the distance between two points in a gesture
  */
-#define CONSTANT_DISTANCE                                               10.0f
+#define SAMPLING_DISTANCE                                               10.0f
 
 
 #pragma mark -
