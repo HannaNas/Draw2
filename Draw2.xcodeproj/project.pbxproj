@@ -207,6 +207,7 @@
 				GCC_PREFIX_HEADER = Draw2_Prefix.pch;
 				INFOPLIST_FILE = "Draw2-Info.plist";
 				PRODUCT_NAME = Draw2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -219,6 +220,7 @@
 				GCC_PREFIX_HEADER = Draw2_Prefix.pch;
 				INFOPLIST_FILE = "Draw2-Info.plist";
 				PRODUCT_NAME = Draw2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
