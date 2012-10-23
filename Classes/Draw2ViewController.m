@@ -8,10 +8,12 @@
 
 #import "Draw2ViewController.h"
 #import "Dot.h"
+#import "Tools.h"
+#define CONSTANT_DISTANCE 10.0f
 
 @implementation Draw2ViewController
 
-//@synthesize viewDraw;
+@synthesize viewDraw;
 @synthesize predefinedGesture;
 @synthesize userGesture;
 
@@ -26,27 +28,55 @@
     
     Dot *dot2 = [[Dot alloc]init];
     dot1.x =50;
-    dot1.y =100;
+    dot1.y =30;
     
     Dot *dot3 = [[Dot alloc]init];
     dot1.x =50;
-    dot1.y =150;
+    dot1.y =40;
     
     Dot *dot4 = [[Dot alloc]init];
     dot1.x =50;
-    dot1.y =200;
+    dot1.y =40;
     
-    predefinedGesture = [[NSMutableArray alloc] init ];
-    [predefinedGesture addObject:dot1 ];
-    [predefinedGesture addObject:dot2 ];
-    [predefinedGesture addObject:dot3 ];
-    [predefinedGesture addObject:dot4 ];
-    
+    predefinedGesture = [NSArray arrayWithObjects:dot1,dot2,dot3,dot4, nil];
+
     userGesture = [[NSMutableArray alloc] init];
     
 }
 
+/*
+ *Gets Point
+ */
+- (void) userTouch:(Dot *)touch{
+    //calculate distance to last saved point
+    BOOL newSample = false;
+    if(userGesture.count==0){
+        [userGesture addObject:touch];
+        newSample = true;
+    }
+    
+    else{
+        Dot *lastpoint = userGesture.lastObject;
+        CGFloat distance = [Tools  distanceBetweenPoint:touch andPoint:lastpoint];
+        //if distance > 10, save next point [sampeling]
+        if (distance==CONSTANT_DISTANCE) {
+            [userGesture addObject:touch];
+            newSample = true;
+        }
+        if (distance>CONSTANT_DISTANCE) {
+            //compute intersection between circle and line between last and new dot
+            [userGesture addObject:touch];
+            newSample = true;
+        }
+    
+    
+    
+    // if new point was added compare saved point with next point in predefinded gesture 
 
+        
+    }
+
+}
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

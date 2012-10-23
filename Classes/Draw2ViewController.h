@@ -7,18 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-
-
-
-
+#import "DrawView.h"
 
 @interface Draw2ViewController : UIViewController {
-	//IBOutlet DrawView *viewDraw;
+    
+    
+	IBOutlet DrawView *viewDraw;
     
     /*
      * Predefined Gesture where we store a possible gesture
      */
-    NSMutableArray *predefinedGesture;
+    NSArray *predefinedGesture;
     /*
      * The users gesture to compare with possible gestures
      */
@@ -27,9 +26,9 @@
 
 }
 
-//@property (nonatomic, retain) IBOutlet DrawView *viewDraw;
+@property (nonatomic, retain) IBOutlet DrawView *viewDraw;
 
-@property (readwrite, assign) NSMutableArray *predefinedGesture;
+@property (readwrite, assign) NSArray *predefinedGesture;
 @property (readwrite, assign) NSMutableArray *userGesture;
 
 @end
