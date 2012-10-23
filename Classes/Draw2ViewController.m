@@ -7,36 +7,43 @@
 //
 
 #import "Draw2ViewController.h"
+#import "Dot.h"
 
 @implementation Draw2ViewController
 
 //@synthesize viewDraw;
-
-
-
-/*
-// The designated initializer. Override to perform setup that is required before the view is loaded.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
-
-
+@synthesize predefinedGesture;
+@synthesize userGesture;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
-		
+
+    Dot *dot1 = [[Dot alloc]init];
+    dot1.x =50;
+    dot1.y =20;
+    
+    Dot *dot2 = [[Dot alloc]init];
+    dot1.x =50;
+    dot1.y =100;
+    
+    Dot *dot3 = [[Dot alloc]init];
+    dot1.x =50;
+    dot1.y =150;
+    
+    Dot *dot4 = [[Dot alloc]init];
+    dot1.x =50;
+    dot1.y =200;
+    
+    predefinedGesture = [[NSMutableArray alloc] init ];
+    [predefinedGesture addObject:dot1 ];
+    [predefinedGesture addObject:dot2 ];
+    [predefinedGesture addObject:dot3 ];
+    [predefinedGesture addObject:dot4 ];
+    
+    userGesture = [[NSMutableArray alloc] init];
+    
 }
 
 

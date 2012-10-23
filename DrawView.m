@@ -21,6 +21,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 
+    
 
 	if(event.allTouches.count ==2){
 		
@@ -39,7 +40,7 @@
 		//NSLog(@"Y2: %f", y2);
 		
 		// Distanz der zwei Punkte wird berechnet
-		float distance = sqrt(pow(x1 -x2, 2.0f)+pow(y1 -y2, 2.0f));
+		//float distance = sqrt(pow(x1 -x2, 2.0f)+pow(y1 -y2, 2.0f));
 		// im Label distanceLabel angezeigt
 		//NSString *string = [NSString stringWithFormat:(@"%.2f"), distance];
 		//distanceLabel.text = string;
