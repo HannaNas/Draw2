@@ -26,27 +26,26 @@
     
     [super viewDidLoad];
 
-    Dot *dot1 = [[Dot alloc]init];
+    Dot *dot1 = [[Dot alloc] init];
     dot1.x =50;
     dot1.y =20;
     
-    Dot *dot2 = [[Dot alloc]init];
+    Dot *dot2 = [[Dot alloc] init];
     dot1.x =50;
     dot1.y =30;
     
-    Dot *dot3 = [[Dot alloc]init];
+    Dot *dot3 = [[Dot alloc] init];
     dot1.x =50;
     dot1.y =40;
     
-    Dot *dot4 = [[Dot alloc]init];
+    Dot *dot4 = [[Dot alloc] init];
     dot1.x =50;
     dot1.y =40;
     
-    predefinedGesture = [NSArray arrayWithObjects:dot1,dot2,dot3,dot4, nil];
+    predefinedGesture =  [[NSArray alloc] initWithObjects:dot1,dot2,dot3,dot4, nil];
 
     userGesture = [[NSMutableArray alloc] init];
     
-    viewDraw = [[DrawView alloc] init];
     viewDraw.delegate = self;
     
 }
@@ -54,9 +53,13 @@
 /*
  * Gets Point from the view and checks if it is in the gesture
  */
-- (void)userTouch:(Dot *)touch{
+- (void)userTouch:(Dot *)touch isFirst:(BOOL)first {
     //calculate distance to last saved point
     BOOL newSample = NO;
+    
+    if (first) {
+        [userGesture removeAllObjects];
+    }
     
     if (userGesture.count == 0){
     
@@ -93,7 +96,7 @@
             Dot *sampleDot = [[Dot alloc] init];
             sampleDot = [Tools dotInConstantDistanceFromDot:lastpoint toDot:touch];
             
-            [userGesture addObject:touch];
+            [userGesture addObject:sampleDot];
             newSample = true;
         
         }
@@ -105,15 +108,23 @@
     //Checking the error
     if (newSample) {
 
+        Dot *sampleDot = [userGesture lastObject];
         Dot *transDot = [[Dot alloc] init];
-        transDot.x = touch.x + userToTemplateDistance.x;
-        transDot.y = touch.y + userToTemplateDistance.y;
-
-        int index = [userGesture indexOfObject:touch];
-        Dot *tempDot = [[Dot alloc] init];
-        tempDot = [predefinedGesture objectAtIndex:index];
+        transDot.x = sampleDot.x + userToTemplateDistance.x;
+        transDot.y = sampleDot.y + userToTemplateDistance.y;
         
+        Dot *tempDot = [predefinedGesture objectAtIndex:([userGesture count] - 1)];
         CGFloat transToTempDistance = fabsf([Tools distanceBetweenPoint:transDot andPoint:tempDot]);
+
+//        Dot *transDot = [[Dot alloc] init];
+//        transDot.x = touch.x + userToTemplateDistance.x;
+//        transDot.y = touch.y + userToTemplateDistance.y;
+//
+//        int index = [userGesture indexOfObject:touch];
+//        Dot *tempDot = [[Dot alloc] init];
+//        tempDot = [predefinedGesture objectAtIndex:index];
+//        
+//        CGFloat transToTempDistance = fabsf([Tools distanceBetweenPoint:transDot andPoint:tempDot]);
         
         if (transToTempDistance > ERROR_DISTANCE) {
             isError = YES;
@@ -151,6 +162,9 @@
 }
 
 
+/**
+ * Deallocates the memory occupied by the receiver.
+ */
 - (void)dealloc {
     
     [predefinedGesture release];
@@ -158,6 +172,9 @@
     
     [userGesture release];
     userGesture = nil;
+    
+    [viewDraw release];
+    viewDraw = nil;
     
     [super dealloc];
 }

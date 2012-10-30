@@ -15,8 +15,9 @@
  * Communicates which is the dot taked from the user input
  *
  * @param touch The dot
+ * @param first Flag
  */
-- (void) userTouch:(Dot *)touch;
+- (void) userTouch:(Dot *)touch isFirst:(BOOL)first;
 
 @end
 

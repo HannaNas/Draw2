@@ -48,10 +48,11 @@
     
     CGFloat absDx = fabsf(dx);
     CGFloat absDy = fabsf(dy);
-
     
+    // Normalized vector
     CGFloat normVector = sqrtf(absDx*absDx + absDy*absDy);
     
+    // Rx = D1x + d * (1/n) * dx
     resultDot.x = dot1.x + SAMPLING_DISTANCE * (1.0f/normVector)*dx;
     resultDot.y = dot1.y + SAMPLING_DISTANCE * (1.0f/normVector)*dy;
 
