@@ -13,11 +13,8 @@
 #pragma mark -
 #pragma mark Properties
 
-@synthesize mX;
-@synthesize mY;
-@synthesize tangible;
-@synthesize angle;
 @synthesize delegate;
+@synthesize userPoints;
 
 #pragma mark -
 #pragma mark Touches operations
@@ -112,96 +109,30 @@
 }
 
 -(void)drawRect:(CGRect)rect{
+    
+    /**UIBezierPath* aPath = [UIBezierPath bezierPath];
+     //[aPath lineCapStyle:kCGLineCapRound];
+     [aPath moveToPoint:CGPointMake(0.0, 0.0)];
+     [aPath addLineToPoint:CGPointMake(10.0, 10.0)];
+     [aPath addCurveToPoint:CGPointMake(18.0, 21.0)
+     controlPoint1:CGPointMake(6.0, 2.0)
+     controlPoint2:CGPointMake(28.0, 10.0)];
+     [aPath stroke];**/
+    
+    // needed:  getPointsUserGesture
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth (c,10);
 
-
-
-	if(self.mX != 0.0){
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	//CGContextSetRGBFillColor(context, 100, 149, 237, 1);
-		
-	//wieder in Bogenmaß umrechnen
-	float endAngle = (M_PI*self.angle)/180;
-	NSLog(@"endAngle %f", endAngle);
-		
-	if (self.tangible ==1) {
-		float xArg = self.mX - 200.0;
-		float yArg = self.mY - 200.0;
-		CGContextSetRGBFillColor(context, 100, 149, 237, 1);
-		CGContextFillEllipseInRect(context, CGRectMake(xArg, yArg, 400, 400));
-		
-		/* Kreisumfang berechnen */
-		float umfang = (M_PI * 400);
-
-		UIBezierPath* path = [[UIBezierPath alloc] init];
-		CGPoint centerPoint = CGPointMake(mX, mY);
-		[path moveToPoint:centerPoint];
-			
-		[path addArcWithCenter:centerPoint radius:(umfang / (2*M_PI)) startAngle:0.0 endAngle:endAngle clockwise:YES];
-		[path closePath];
-		
-		[[UIColor redColor] setFill];
-		[path fill];
-	}
-	else if (self.tangible ==2) {
-		float xArg = self.mX - 250.0;
-		float yArg = self.mY - 250.0;
-		CGContextSetRGBFillColor(context, 255, 255, 000, 1);
-		CGContextFillEllipseInRect(context, CGRectMake(xArg, yArg, 500, 500));
-		
-		/* Kreisumfang berechnen */
-		float umfang = (M_PI * 500);
-		
-		UIBezierPath* path = [[UIBezierPath alloc] init];
-		CGPoint centerPoint = CGPointMake(mX, mY);
-		[path moveToPoint:centerPoint];
-		
-		[path addArcWithCenter:centerPoint radius:(umfang / (2*M_PI)) startAngle:0.0 endAngle:endAngle clockwise:YES];
-		[path closePath];
-		
-		[[UIColor redColor] setFill];
-		[path fill];
-	}
-	else if (self.tangible ==3) {
-		float xArg = self.mX - 150.0;
-		float yArg = self.mY - 150.0;
-		CGContextSetRGBFillColor(context, 255, 100, 000, 1);
-		CGContextFillEllipseInRect(context, CGRectMake(xArg, yArg, 300, 300));
-		
-		/* Kreisumfang berechnen */
-		float umfang = (M_PI * 300);
-		UIBezierPath* path = [[UIBezierPath alloc] init];
-		CGPoint centerPoint = CGPointMake(mX, mY);
-		[path moveToPoint:centerPoint];
-		
-		[path addArcWithCenter:centerPoint radius:(umfang / (2*M_PI)) startAngle:0.0 endAngle:endAngle clockwise:YES];
-		[path closePath];
-		
-		[[UIColor redColor] setFill];
-		[path fill];
-	}
-	else if (self.tangible ==4) {
-		float xArg = self.mX - 100.0;
-		float yArg = self.mY - 100.0;
-		CGContextSetRGBFillColor(context, 84, 255, 159, 1);
-		CGContextFillEllipseInRect(context, CGRectMake(xArg, yArg, 200, 200));
-		
-		/* Kreisumfang berechnen */
-		float umfang = (M_PI * 200);
-		UIBezierPath* path = [[UIBezierPath alloc] init];
-		CGPoint centerPoint = CGPointMake(mX, mY);
-		[path moveToPoint:centerPoint];
-		
-
-		[path addArcWithCenter:centerPoint radius:(umfang / (2*M_PI)) startAngle:0.0 endAngle:endAngle clockwise:YES];
-		[path closePath];
-		
-		[[UIColor redColor] setFill];
-		[path fill];
-	}
-	
-		
-
-	}
+    CGFloat red[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+    CGContextSetStrokeColor(c, red);
+    CGContextBeginPath(c);
+    CGContextMoveToPoint(c, 50.0f, 50.0f);
+    CGContextAddLineToPoint(c, 100.0f, 100.0f);
+    CGContextAddLineToPoint(c, 200.0f, 100.0f);
+    CGContextAddLineToPoint(c, 200.0f, 200.0f);
+    CGContextSetLineCap(c, kCGLineCapRound);
+    CGContextSetLineJoin(c, kCGLineCapRound);
+    CGContextStrokePath(c);
 
 }
 

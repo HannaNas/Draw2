@@ -23,39 +23,20 @@
 
 
 @interface DrawView : UIView {
-
-    // TODO: Do we need this?
-	int tangible;
-	float mX;
-	float mY;
-	float angle;
-  
-    
-	IBOutlet UILabel *tempLabel;
-	
-	IBOutlet UILabel *tangibleLabel;
     
     /*
      * Delegate
      */
     id<DrawViewDelegate> delegate_;
-	
-
+    NSMutableArray *userPoints;
 
 }
-
-// TODO: Do we need this?
-
-@property (readwrite, assign) float mX;
-@property (readwrite, assign) float mY;
-@property (readwrite, assign) float angle;
-@property (readwrite, assign) int tangible;
 
 /*
  * Delegate
  */
 @property (nonatomic, readwrite, assign) id<DrawViewDelegate> delegate;
-
+@property (nonatomic, readwrite, assign) NSArray *userPoints;
 
 
 @end
