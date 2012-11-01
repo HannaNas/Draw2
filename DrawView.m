@@ -128,6 +128,7 @@
     CGContextBeginPath(c);
     CGContextMoveToPoint(c, 50.0f, 50.0f);
     CGContextAddLineToPoint(c, 100.0f, 100.0f);
+
     CGContextAddLineToPoint(c, 200.0f, 100.0f);
     CGContextAddLineToPoint(c, 200.0f, 200.0f);
     CGContextSetLineCap(c, kCGLineCapRound);
