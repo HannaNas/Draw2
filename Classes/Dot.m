@@ -11,6 +11,9 @@
 
 @implementation Dot
 
+#pragma mark -
+#pragma mark Properties
+
 @synthesize x;
 @synthesize y;
 

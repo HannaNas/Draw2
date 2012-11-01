@@ -10,7 +10,15 @@
 
 
 @interface Vector : NSObject {
+    
+    /**
+     * The X Coordinate
+     */
 	CGFloat x;
+    
+    /**
+     * The Y Coordinate
+     */
 	CGFloat y;
 }
 

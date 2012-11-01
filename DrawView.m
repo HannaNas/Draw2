@@ -14,7 +14,6 @@
 #pragma mark Properties
 
 @synthesize delegate;
-@synthesize userPoints;
 
 #pragma mark -
 #pragma mark Touches operations
@@ -108,6 +107,11 @@
 
 }
 
+/**
+ * Draws the receiver’s image within the passed-in rectangle
+ *
+ * @param rect The portion of the view’s bounds that needs to be updated. 
+ */
 -(void)drawRect:(CGRect)rect{
     
     /**UIBezierPath* aPath = [UIBezierPath bezierPath];
@@ -127,13 +131,62 @@
     CGContextSetStrokeColor(c, red);
     CGContextBeginPath(c);
     CGContextMoveToPoint(c, 50.0f, 50.0f);
-    CGContextAddLineToPoint(c, 100.0f, 100.0f);
-    CGContextAddLineToPoint(c, 200.0f, 100.0f);
-    CGContextAddLineToPoint(c, 200.0f, 200.0f);
+//    CGContextAddLineToPoint(c, 100.0f, 100.0f);
+//    CGContextAddLineToPoint(c, 200.0f, 100.0f);
+//    CGContextAddLineToPoint(c, 200.0f, 200.0f);
+
+    CGContextAddLineToPoint(c, 50.0f, 70.0f);
+    CGContextAddLineToPoint(c, 60.0f, 78.0f);
+    CGContextAddLineToPoint(c, 70.0f, 86.0f);
     CGContextSetLineCap(c, kCGLineCapRound);
     CGContextSetLineJoin(c, kCGLineCapRound);
     CGContextStrokePath(c);
 
+}
+
+/*
+ * Receives the gesture and posible gestures where the user gesture can be contained and prints them
+ */
+- (void)drawUserGesture:(NSArray *)userGesture forPossibleGesutures:(NSArray *)possibleGestures {
+
+    if (userPoints == nil) {
+        
+        userPoints = [[NSMutableArray alloc] init];
+        
+    }
+    
+    [userPoints removeAllObjects];
+    [userPoints addObjectsFromArray:userGesture];
+
+    
+    if (drawableGestures == nil) {
+        
+        drawableGestures = [[NSMutableArray alloc] init];
+        
+    }
+    
+    [drawableGestures removeAllObjects];
+    [drawableGestures addObjectsFromArray:possibleGestures];
+    
+    [self drawRect:self.frame];
+    
+}
+
+/**
+ * Deallocates the memory occupied by the receiver.
+ */
+-(void)dealloc {
+
+    [userPoints release];
+    userPoints = nil;
+    
+    [drawableGestures release];
+    drawableGestures = nil;
+    
+    delegate_ = nil;
+    
+    [super dealloc];
+    
 }
 
 @end

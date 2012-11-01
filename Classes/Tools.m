@@ -41,7 +41,7 @@
  */
 +(Dot *)dotInConstantDistanceFromDot:(Dot *)dot1 toDot:(Dot *)dot2 {
 
-    Dot *resultDot = [[Dot alloc] init];
+    Dot *resultDot = [[[Dot alloc] init] autorelease];
     
     CGFloat dx = dot2.x - dot1.x;
     CGFloat dy = dot2.y - dot1.y;
@@ -58,6 +58,40 @@
 
     return resultDot;
 
+}
+
+
+/*
+ * Returns a Dot given to other dots used to form a director vector
+ *
+ * @param dotToTranslate The dot that needs to be traslated
+ * @param dot1 The first dot
+ * @param dot2 The second dot
+ * @return The dot
+ */
++(Dot *)transformFromDot:(Dot *)dotToTranslate
+               givenDot1:(Dot *)dot1
+                    dot2:(Dot *)dot2 {
+    
+    Dot *resultDot = [[[Dot alloc] init] autorelease];
+    
+    CGFloat dx = dot2.x - dot1.x;
+    CGFloat dy = dot2.y - dot1.y;
+    
+    CGFloat distance = sqrtf(dx*dx + dy*dy);
+    
+    CGFloat absDx = fabsf(dx);
+    CGFloat absDy = fabsf(dy);
+    
+    // Normalized vector
+    CGFloat normVector = sqrtf(absDx*absDx + absDy*absDy);
+    
+    // Rx = D1x + d * (1/n) * dx
+    resultDot.x = dotToTranslate.x + distance * (1.0f/normVector)*dx;
+    resultDot.y = dotToTranslate.y + distance * (1.0f/normVector)*dy;
+    
+    return resultDot;
+    
 }
 
 @end
