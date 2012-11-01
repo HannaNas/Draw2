@@ -11,6 +11,9 @@
 
 @implementation Vector
 
+#pragma mark -
+#pragma mark Properties
+
 @synthesize x;
 @synthesize y;
 

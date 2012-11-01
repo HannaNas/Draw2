@@ -30,4 +30,16 @@
  */
 +(Dot *)dotInConstantDistanceFromDot:(Dot *)dot1 toDot:(Dot *)dot2;
 
+/**
+ * Returns a Dot given to other dots used to form a director vector
+ *
+ * @param dotToTranslate The dot that needs to be traslated
+ * @param dot1 The first dot
+ * @param dot2 The second dot
+ * @return The dot
+ */
++(Dot *)transformFromDot:(Dot *)dotToTranslate
+               givenDot1:(Dot *)dot1
+                    dot2:(Dot *)dot2;
+
 @end

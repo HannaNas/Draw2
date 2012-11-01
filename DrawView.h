@@ -24,19 +24,34 @@
 
 @interface DrawView : UIView {
     
-    /*
+    /**
      * Delegate
      */
     id<DrawViewDelegate> delegate_;
+    
+    /**
+     * User Points
+     */
     NSMutableArray *userPoints;
 
+    /**
+     * Possible Gestures that can be drawn
+     */
+    NSMutableArray *drawableGestures;
+    
 }
 
 /*
  * Delegate
  */
 @property (nonatomic, readwrite, assign) id<DrawViewDelegate> delegate;
-@property (nonatomic, readwrite, assign) NSArray *userPoints;
 
+/**
+ * Receives the gesture and posible gestures where the user gesture can be contained and prints them
+ *
+ * @param userGesture The user gesture
+ * @param possibleGestures The possible gestures
+ */
+- (void)drawUserGesture:(NSArray *)userGesture forPossibleGesutures:(NSArray *)possibleGestures;
 
 @end

@@ -18,7 +18,7 @@
 /**
  * Defines the error distance allowed
  */
-#define ERROR_DISTANCE                                                  20.0f
+#define ERROR_DISTANCE                                                  13.0f
 
 #pragma mark -
 #pragma mark Colors definition

@@ -10,8 +10,16 @@
 
 
 @interface Dot : NSObject {
+    
+    /**
+     * The X Coordinate
+     */
 	CGFloat x;
-	CGFloat y;
+
+    /**
+     * The Y Coordinate
+     */
+    CGFloat y;
 }
 
 @property  CGFloat x;
