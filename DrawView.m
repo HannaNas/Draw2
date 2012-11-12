@@ -131,12 +131,12 @@
     CGContextSetStrokeColor(c, red);
     CGContextBeginPath(c);
     CGContextMoveToPoint(c, 50.0f, 50.0f);
-<<<<<<< HEAD
+
     CGContextAddLineToPoint(c, 100.0f, 100.0f);
 
     CGContextAddLineToPoint(c, 200.0f, 100.0f);
     CGContextAddLineToPoint(c, 200.0f, 200.0f);
-=======
+
 //    CGContextAddLineToPoint(c, 100.0f, 100.0f);
 //    CGContextAddLineToPoint(c, 200.0f, 100.0f);
 //    CGContextAddLineToPoint(c, 200.0f, 200.0f);
@@ -144,7 +144,7 @@
     CGContextAddLineToPoint(c, 50.0f, 70.0f);
     CGContextAddLineToPoint(c, 60.0f, 78.0f);
     CGContextAddLineToPoint(c, 70.0f, 86.0f);
->>>>>>> 03d496c67a056d8b4ed7c740ae25a90c40a411cb
+
     CGContextSetLineCap(c, kCGLineCapRound);
     CGContextSetLineJoin(c, kCGLineCapRound);
     CGContextStrokePath(c);
