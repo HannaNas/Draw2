@@ -80,9 +80,6 @@
  */
 - (void)dealloc {
     
-    [predefinedGesture release];
-    predefinedGesture = nil;
-    
     [userGesture release];
     userGesture = nil;
     
@@ -144,23 +141,20 @@
     dotG24.y = 20;
     
     Dot *dotG25 = [[[Dot alloc] init] autorelease];
-    dotG24.x = 60;
-    dotG24.y = 20;
+    dotG25.x = 60;
+    dotG25.y = 20;
     
     Dot *dotG26 = [[[Dot alloc] init] autorelease];
-    dotG24.x = 70;
-    dotG24.y = 20;
+    dotG26.x = 70;
+    dotG26.y = 20;
     
     NSArray *array1 = [[[NSArray alloc] initWithObjects:dotG11, dotG12, dotG13, dotG14, nil] autorelease];
     NSArray *array2 = [[[NSArray alloc] initWithObjects:dotG21, dotG22, dotG23, dotG24, dotG25, dotG26, nil] autorelease];
     
     predefinedGestureArray = [[NSArray alloc] initWithObjects:array1, array2, nil];
     
-    predefinedGesture = [[NSArray alloc] initWithObjects:array1, array2, nil];
-
     userGesture = [[NSMutableArray alloc] init];
     drawableGesturesArray = [[NSMutableArray alloc] init];
-    
     
     viewDraw.delegate = self;
     

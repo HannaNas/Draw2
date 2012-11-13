@@ -18,10 +18,6 @@
 	IBOutlet DrawView *viewDraw;
     
     /*
-     * Predefined Gesture where we store a possible gesture
-     */
-    NSArray *predefinedGesture;
-    /*
      * The users gesture to compare with possible gestures
      */
     NSMutableArray *userGesture;

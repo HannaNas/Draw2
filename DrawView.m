@@ -118,23 +118,59 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 10);
     CGContextSetStrokeColorWithColor(context, UIColor.redColor.CGColor);
+    
+    CGContextSetLineJoin(context, kCGLineJoinRound);
+    
     CGContextBeginPath(context);
     
-    for (int i =0; i<[userPoints count]; i++) {
+    for (int i = 0; i<[userPoints count]; i++) {
         
         Dot *dot = [userPoints objectAtIndex:i];
-        if (i==0) {
+       
+        if (i == 0) {
             CGContextMoveToPoint(context, dot.x, dot.y);
+            
+            if (i == [userPoints count]) {
+                CGContextAddLineToPoint(context, dot.x, dot.y);
+            }
             
         } 
         else{
             CGContextAddLineToPoint(context, dot.x, dot.y);
         }
     }
-
     
     //finished drawing
     CGContextStrokePath(context);
+    
+    CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
+        
+    for (NSArray *possibleGesture in drawableGestures) {
+        
+        int startingDot = [userPoints count];
+        int count = [possibleGesture count];
+        
+        while (startingDot < count) {
+            
+            Dot *dot = [possibleGesture objectAtIndex:startingDot];
+            
+            if (startingDot == [userPoints count]) {
+                CGContextBeginPath(context);
+                CGContextMoveToPoint(context, dot.x, dot.y);
+            } else {
+                CGContextAddLineToPoint(context, dot.x, dot.y);
+            }
+            
+            if (startingDot == (count-1)) {    //finished drawing
+
+                CGContextStrokePath(context);
+            }
+            
+            startingDot++;
+            
+        }
+        
+    }
 
 }
 
@@ -163,9 +199,7 @@
     [drawableGestures addObjectsFromArray:possibleGestures];
     
     [self setNeedsDisplay];
-    
-    //[self drawRect:self.frame];
-    
+        
 }
 
 /**
