@@ -114,40 +114,27 @@
  */
 -(void)drawRect:(CGRect)rect{
     
-    /**UIBezierPath* aPath = [UIBezierPath bezierPath];
-     //[aPath lineCapStyle:kCGLineCapRound];
-     [aPath moveToPoint:CGPointMake(0.0, 0.0)];
-     [aPath addLineToPoint:CGPointMake(10.0, 10.0)];
-     [aPath addCurveToPoint:CGPointMake(18.0, 21.0)
-     controlPoint1:CGPointMake(6.0, 2.0)
-     controlPoint2:CGPointMake(28.0, 10.0)];
-     [aPath stroke];**/
+    //set up context
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, 10);
+    CGContextSetStrokeColorWithColor(context, UIColor.redColor.CGColor);
+    CGContextBeginPath(context);
     
-    // needed:  getPointsUserGesture
-    CGContextRef c = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth (c,10);
+    for (int i =0; i<[userPoints count]; i++) {
+        
+        Dot *dot = [userPoints objectAtIndex:i];
+        if (i==0) {
+            CGContextMoveToPoint(context, dot.x, dot.y);
+            
+        } 
+        else{
+            CGContextAddLineToPoint(context, dot.x, dot.y);
+        }
+    }
 
-    CGFloat red[4] = {1.0f, 0.0f, 0.0f, 1.0f};
-    CGContextSetStrokeColor(c, red);
-    CGContextBeginPath(c);
-    CGContextMoveToPoint(c, 50.0f, 50.0f);
-
-    CGContextAddLineToPoint(c, 100.0f, 100.0f);
-
-    CGContextAddLineToPoint(c, 200.0f, 100.0f);
-    CGContextAddLineToPoint(c, 200.0f, 200.0f);
-
-//    CGContextAddLineToPoint(c, 100.0f, 100.0f);
-//    CGContextAddLineToPoint(c, 200.0f, 100.0f);
-//    CGContextAddLineToPoint(c, 200.0f, 200.0f);
-
-    CGContextAddLineToPoint(c, 50.0f, 70.0f);
-    CGContextAddLineToPoint(c, 60.0f, 78.0f);
-    CGContextAddLineToPoint(c, 70.0f, 86.0f);
-
-    CGContextSetLineCap(c, kCGLineCapRound);
-    CGContextSetLineJoin(c, kCGLineCapRound);
-    CGContextStrokePath(c);
+    
+    //finished drawing
+    CGContextStrokePath(context);
 
 }
 
@@ -175,7 +162,9 @@
     [drawableGestures removeAllObjects];
     [drawableGestures addObjectsFromArray:possibleGestures];
     
-    [self drawRect:self.frame];
+    [self setNeedsDisplay];
+    
+    //[self drawRect:self.frame];
     
 }
 
