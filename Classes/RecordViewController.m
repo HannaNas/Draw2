@@ -10,6 +10,16 @@
 
 @interface RecordViewController ()
 
+/**
+ * Performs the cancel action
+ */
+- (void) cancelButton;
+
+/**
+ * Performs the save action
+ */
+- (void) saveButton;
+
 @end
 
 @implementation RecordViewController
@@ -134,19 +144,21 @@
 #pragma mark -
 #pragma mark User interaction
 
-/**
+/*
  * Performs the cancel button action
  */
-- (IBAction) cancelButton{
-    [delegate recordGesture:NO];
+- (void) cancelButton{
+    [delegate recordGestureWithColor:@""
+                     applicationName:@""];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-/**
+/*
  * Performs the save button action
  */
-- (IBAction) saveButton{
-    [delegate recordGesture:YES];
+- (void) saveButton{
+    [delegate recordGestureWithColor:[colorsArray objectAtIndex:[picker selectedRowInComponent:0]]
+                     applicationName:[appsArray objectAtIndex:[picker selectedRowInComponent:1]]];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

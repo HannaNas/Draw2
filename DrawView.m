@@ -96,7 +96,7 @@
     if (recognizing) {
     
         finishRecognizing = NO;
-    
+        [delegate recognitionFinished];
     }
     
 //    if(event.allTouches.count ==1){

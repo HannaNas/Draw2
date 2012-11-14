@@ -61,7 +61,6 @@
  */
 - (void)updateDrawableGestures;
 
--(void)record;
 @end
 
 #pragma mark -
@@ -96,6 +95,9 @@
     
     [viewDraw release];
     viewDraw = nil;
+    
+    [recordViewController release];
+    recordViewController = nil;
     
     [super dealloc];
 }
@@ -170,6 +172,7 @@
 -(void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
+    [self modeSwitch];
     viewDraw.delegate = self;
 
 }
@@ -243,30 +246,57 @@
  */
 - (void)endRecordingNewGesture {
 
-    RecordViewController *recordViewController = [[RecordViewController alloc]init];
+    if (recordViewController == nil) {
+        recordViewController = [[RecordViewController alloc]init];
+        recordViewController.delegate = self;
+
+    }
+    
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:recordViewController];
     [self presentViewController:navigationController animated:YES completion:nil];
 
 }
 
+/**
+ * Recognition finished. Opens the application recorded in the gesuture
+ */
+- (void)recognitionFinished {
+
+    // http://mobiledevelopertips.com/cocoa/launching-other-apps-within-an-iphone-application.html
+//    http://wiki.akosma.com/IPhone_URL_Schemes#Facebook
+    
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel://914623510"]];
+
+//    // Create your query ...
+    NSString* searchQuery = @"1 Infinite Loop, Cupertino, CA 95014";
+//    
+//    // Be careful to always URL encode things like spaces and other symbols that aren't URL friendly
+    searchQuery =  [searchQuery stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+//    
+//    // Now create the URL string ...
+//    NSString* urlString = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@", searchQuery];
+    
+    // YOU NEED TO HAVE THE APPLICATION INSTALLED TO LAUNCH IT
+    
+    NSURL *urlString = [NSURL URLWithString:[NSString stringWithFormat:@"maps://%@", searchQuery]];
+    
+    // An the final magic ... openURL!
+    [[UIApplication sharedApplication] openURL:urlString];
+}
 
 #pragma mark -
 #pragma mark RecordViewControllerDelegate
 
 /**
  * Record gesture
- *
- * @param condition The condition
  */
-- (void)recordGesture:(BOOL)condition{
-    if (condition) {
-        [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
-    }
-    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
-}
+- (void)recordGestureWithColor:(NSString *)color applicationName:(NSString *)appName {
 
-- (void)record{
-    [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
+    if (![color isEqualToString:@""]) {
+        [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
+        //TODO: set the color and the appName.
+    }
+
     [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
 }
 

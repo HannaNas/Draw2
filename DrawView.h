@@ -24,6 +24,11 @@
  */
 - (void)endRecordingNewGesture;
 
+/**
+ * Recognition finished
+ */
+- (void)recognitionFinished;
+
 @end
 
 

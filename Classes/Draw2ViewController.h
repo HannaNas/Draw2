@@ -44,7 +44,10 @@
      */
     Vector *userToTemplateDistance;
     
-    
+    /*
+     * Record View Controller
+     */
+    RecordViewController *recordViewController;
     
 }
 

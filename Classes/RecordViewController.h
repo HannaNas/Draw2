@@ -13,9 +13,10 @@
 /**
  * Record gesture
  *
- * @param condition The condition
+ * @param color The color name
+ * @param appName The application name
  */
-- (void)recordGesture:(BOOL)condition;
+- (void)recordGestureWithColor:(NSString *)color applicationName:(NSString *)appName;
 
 @end
 
@@ -33,8 +34,5 @@
 @property (nonatomic, readwrite, retain) IBOutlet UIPickerView *picker;
 @property (nonatomic, readwrite, assign) id<RecordViewControllerDelegate>delegate;
 
-
-- (IBAction) cancelButton;
-- (IBAction) saveButton;
 
 @end
