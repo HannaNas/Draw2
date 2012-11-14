@@ -19,6 +19,9 @@
      */
 	IBOutlet DrawView *viewDraw;
     
+    /*
+     * Mode switch
+     */
     IBOutlet UISegmentedControl *modeSwitch;
     
     /*
@@ -49,6 +52,10 @@
  * Defines the viewDraw and exports it to the IB
  */
 @property (nonatomic, readwrite, retain) IBOutlet DrawView *viewDraw;
+
+/**
+ * Defines the modeSwitch and exports it to the IB
+ */
 @property (nonatomic, readwrite, retain) IBOutlet UISegmentedControl *modeSwitch;
 
 /**

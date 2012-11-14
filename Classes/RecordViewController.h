@@ -22,9 +22,6 @@
 @interface RecordViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>{
     
     IBOutlet UIPickerView *picker;
-    IBOutlet UINavigationBar *navigationBar;
-    IBOutlet UIBarButtonItem *cancelButton;
-    IBOutlet UIBarButtonItem *saveButton;
     NSMutableArray *colorsArray;
     NSMutableArray *appsArray;
     
@@ -34,11 +31,6 @@
 }
 
 @property (nonatomic, readwrite, retain) IBOutlet UIPickerView *picker;
-
-@property (nonatomic, readwrite, retain) IBOutlet UINavigationBar *navigationBar;
-@property (nonatomic, readwrite, retain) IBOutlet UIBarButtonItem *cancelButton;
-@property (nonatomic, readwrite, retain) IBOutlet UIBarButtonItem *saveButton;
-
 @property (nonatomic, readwrite, assign) id<RecordViewControllerDelegate>delegate;
 
 

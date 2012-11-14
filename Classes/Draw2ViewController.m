@@ -162,7 +162,11 @@
     
 }
 
-
+/**
+ * Notifies the view controller that its view is about to be added to a view hierarchy.
+ * 
+ * @param animated If YES, the view is being added to the window using an animation.
+ */
 -(void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
@@ -179,7 +183,9 @@
 
 
 
-
+/**
+ * Sent to the view controller when the app receives a memory warning.
+ */
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -239,15 +245,7 @@
 
     RecordViewController *recordViewController = [[RecordViewController alloc]init];
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:recordViewController];
-    navigationController.navigationItem.title = @"Record";
-    
-    UIBarButtonItem *saveButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(record)] autorelease];
-    
-    navigationController.navigationItem.rightBarButtonItem = saveButton;
     [self presentViewController:navigationController animated:YES completion:nil];
-    
-    
-   // [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
 
 }
 
