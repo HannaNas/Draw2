@@ -9,6 +9,7 @@
 #import "Draw2ViewController.h"
 #import "Constants.h"
 #import "Dot.h"
+#import "RecordViewController.h"
 #import "Tools.h"
 #import "Vector.h"
 
@@ -60,7 +61,7 @@
  */
 - (void)updateDrawableGestures;
 
-
+-(void)record;
 @end
 
 #pragma mark -
@@ -236,10 +237,40 @@
  */
 - (void)endRecordingNewGesture {
 
-    [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
+    RecordViewController *recordViewController = [[RecordViewController alloc]init];
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:recordViewController];
+    navigationController.navigationItem.title = @"Record";
+    
+    UIBarButtonItem *saveButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(record)] autorelease];
+    
+    navigationController.navigationItem.rightBarButtonItem = saveButton;
+    [self presentViewController:navigationController animated:YES completion:nil];
+    
+    
+   // [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
 
 }
 
+
+#pragma mark -
+#pragma mark RecordViewControllerDelegate
+
+/**
+ * Record gesture
+ *
+ * @param condition The condition
+ */
+- (void)recordGesture:(BOOL)condition{
+    if (condition) {
+        [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
+    }
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+}
+
+- (void)record{
+    [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+}
 
 #pragma mark -
 #pragma mark Other methods

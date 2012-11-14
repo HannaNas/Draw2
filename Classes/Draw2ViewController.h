@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "DrawView.h"
+#import "RecordViewController.h"
 #import "Vector.h"
 
-@interface Draw2ViewController : UIViewController <DrawViewDelegate> {
+
+@interface Draw2ViewController : UIViewController <DrawViewDelegate, RecordViewControllerDelegate> {
     
     /*
      * The draw view
@@ -38,6 +40,8 @@
      * User to template distance
      */
     Vector *userToTemplateDistance;
+    
+    
     
 }
 
