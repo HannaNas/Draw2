@@ -71,6 +71,7 @@
 #pragma mark Properties
 
 @synthesize viewDraw;
+@synthesize modeSwitch;
 
 #pragma mark -
 #pragma mark Memory management

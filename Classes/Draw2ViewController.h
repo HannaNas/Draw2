@@ -17,6 +17,8 @@
      */
 	IBOutlet DrawView *viewDraw;
     
+    IBOutlet UISegmentedControl *modeSwitch;
+    
     /*
      * The users gesture to compare with possible gestures
      */
@@ -43,6 +45,7 @@
  * Defines the viewDraw and exports it to the IB
  */
 @property (nonatomic, readwrite, retain) IBOutlet DrawView *viewDraw;
+@property (nonatomic, readwrite, retain) IBOutlet UISegmentedControl *modeSwitch;
 
 
 @end
