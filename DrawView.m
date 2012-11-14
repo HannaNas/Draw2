@@ -14,6 +14,9 @@
 #pragma mark Properties
 
 @synthesize delegate;
+@synthesize recording;
+@synthesize recognizing;
+@synthesize finishRecognizing;
 
 #pragma mark -
 #pragma mark Touches operations
@@ -25,6 +28,8 @@
  * @param event An object representing the event to which the touches belong.
  */
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+    finishRecognizing = NO;
 
 	if(event.allTouches.count ==1){
 		
@@ -43,7 +48,6 @@
         [delegate userTouch:dot isFirst:YES];
         [dot release];
 	
-		//[self setNeedsDisplay];
 	}
 }
 
@@ -54,7 +58,8 @@
  * @param event An object representing the event to which the touches belong.
  */
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-	if(event.allTouches.count ==1){
+	
+    if ((event.allTouches.count ==1) && !finishRecognizing){
 		
 		//NSLog(@"One Touch");
 		NSArray *touches = [event.allTouches allObjects];
@@ -71,7 +76,6 @@
         [delegate userTouch:dot isFirst:NO];
         [dot release];
         
-		//[self setNeedsDisplay];
 	}
 }
 
@@ -83,27 +87,37 @@
  * @param event An object representing the event to which the touches belong.
  */
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-
     
-    if(event.allTouches.count ==1){
-		
-		//NSLog(@"One Touch");
-		NSArray *touches = [event.allTouches allObjects];
-		CGPoint pointOne = [[touches objectAtIndex:0]locationInView:self];
-        
-		float xT = pointOne.x;
-		float yT = pointOne.y;
-        Dot *dot = [[Dot alloc]init];
-        dot.x = xT;
-        dot.y = yT;
-        
-        NSLog(@"touchesEnded Point (%f, %f)", xT, yT);
-        
-        [delegate userTouch:dot isFirst:NO];
-        [dot release];
-        
-		//[self setNeedsDisplay];
-	}
+    if (recording) {
+        NSLog(@"YOU HAVE FINISHED YOUR RECORD!!!");
+        [delegate endRecordingNewGesture];
+    }
+
+    if (recognizing) {
+    
+        finishRecognizing = NO;
+    
+    }
+    
+//    if(event.allTouches.count ==1){
+//		
+//		//NSLog(@"One Touch");
+//		NSArray *touches = [event.allTouches allObjects];
+//		CGPoint pointOne = [[touches objectAtIndex:0]locationInView:self];
+//        
+//		float xT = pointOne.x;
+//		float yT = pointOne.y;
+//        Dot *dot = [[Dot alloc]init];
+//        dot.x = xT;
+//        dot.y = yT;
+//        
+//        NSLog(@"touchesEnded Point (%f, %f)", xT, yT);
+//        
+//        [delegate userTouch:dot isFirst:NO];
+//        [dot release];
+//        
+//		//[self setNeedsDisplay];
+//	}
 
 }
 
@@ -118,6 +132,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 10);
     CGContextSetStrokeColorWithColor(context, UIColor.redColor.CGColor);
+    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineJoin(context, kCGLineCapRound);
     
     CGContextSetLineJoin(context, kCGLineJoinRound);
     

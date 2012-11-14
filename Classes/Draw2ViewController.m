@@ -152,13 +152,21 @@
     NSArray *array1 = [[[NSArray alloc] initWithObjects:dotG11, dotG12, dotG13, dotG14, nil] autorelease];
     NSArray *array2 = [[[NSArray alloc] initWithObjects:dotG21, dotG22, dotG23, dotG24, dotG25, dotG26, nil] autorelease];
     
-    predefinedGestureArray = [[NSArray alloc] initWithObjects:array1, array2, nil];
+    predefinedGestureArray = [[NSMutableArray alloc] initWithObjects:array1, array2, nil];
     
     userGesture = [[NSMutableArray alloc] init];
     drawableGesturesArray = [[NSMutableArray alloc] init];
     
-    viewDraw.delegate = self;
+//    viewDraw.delegate = self;
     
+}
+
+
+-(void)viewWillAppear:(BOOL)animated {
+
+    [super viewWillAppear:animated];
+    viewDraw.delegate = self;
+
 }
 
 /**
@@ -205,6 +213,7 @@
         [userGesture addObject:touch];
         
         // Brings all the predefined gestures to the user first tap
+        
         for (NSArray *gesture in predefinedGestureArray) {
             
             [drawableGesturesArray addObject:[self bringPosibleGesture:gesture toDot:touch]];
@@ -221,6 +230,19 @@
     
     }
 }
+
+/**
+ * End recording the new gesture
+ */
+- (void)endRecordingNewGesture {
+
+    [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
+
+}
+
+
+#pragma mark -
+#pragma mark Other methods
 
 /*
  * Checks if the distante between dot1 and dot2 is bigger than the ERROR_DISTANCE
@@ -339,44 +361,64 @@
  */
 - (void)updateDrawableGestures {
 
-    NSLog(@"Try to updateDrawableGestures");
-    NSMutableArray *auxDrawableGesturesArray = [[[NSMutableArray alloc] init] autorelease];
+    if (modeSwitch.selectedSegmentIndex == 0) {
     
-    Dot *lastDot = [userGesture lastObject];
-    
-    for (NSArray *gesture in drawableGesturesArray) {
+        NSLog(@"Try to updateDrawableGestures");
+        NSMutableArray *auxDrawableGesturesArray = [[[NSMutableArray alloc] init] autorelease];
         
-        if ([self isPossibleDot:lastDot inGesture:gesture forPosition:([userGesture count] - 1)]) {
-            
-            [auxDrawableGesturesArray addObject:gesture];
-            NSLog(@"Gesture admited");
-            
-        } else {
+        Dot *lastDot = [userGesture lastObject];
         
-            NSLog(@"Gesture discarded");
+        for (NSArray *gesture in drawableGesturesArray) {
+            
+            if ([self isPossibleDot:lastDot inGesture:gesture forPosition:([userGesture count] - 1)]) {
+                
+                [auxDrawableGesturesArray addObject:gesture];
+                NSLog(@"Gesture admited");
+                
+            } else {
+                
+                NSLog(@"Gesture discarded");
+                
+            }
             
         }
         
-    }
-    
-    [drawableGesturesArray removeAllObjects];
-    [drawableGesturesArray addObjectsFromArray:auxDrawableGesturesArray];
-    
-    
-    // Sends to print the getures
-    [viewDraw drawUserGesture:userGesture forPossibleGesutures:drawableGesturesArray];
-    
-    
-    if ([drawableGesturesArray count] == 1) {
+        [drawableGesturesArray removeAllObjects];
+        [drawableGesturesArray addObjectsFromArray:auxDrawableGesturesArray];
         
-        if ([[drawableGesturesArray objectAtIndex:0] count] == [userGesture count]) {
+        
+        // Sends to print the getures
+        [viewDraw drawUserGesture:userGesture forPossibleGesutures:drawableGesturesArray];
+    
+        if ([drawableGesturesArray count] == 1) {
             
-            NSLog(@"GESTURE RECOGNIZED!!!");
+            if ([[drawableGesturesArray objectAtIndex:0] count] == [userGesture count]) {
+                
+                NSLog(@"GESTURE RECOGNIZED!!!");
+                viewDraw.finishRecognizing = YES;
+                
+            }
+            
+        }
 
-            
-        }
+    } else {
+        
+        [viewDraw drawUserGesture:userGesture forPossibleGesutures:nil];
         
     }
+    
+    
+}
+
+/*
+ * Mode switch
+ */
+-(IBAction)modeSwitch {
+
+    viewDraw.recording = (modeSwitch.selectedSegmentIndex == 1);
+    viewDraw.recognizing = (modeSwitch.selectedSegmentIndex == 0);
+
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
     
 }
 

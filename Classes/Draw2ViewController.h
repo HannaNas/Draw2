@@ -27,7 +27,7 @@
     /*
      * The array of Predefined Gestures: where we store the predefined gestures. Defined in the view did load
      */
-    NSArray *predefinedGestureArray;
+    NSMutableArray *predefinedGestureArray;
     
     /*
      * The array of drawable gestures: where we store the possible gestures that can be drawn. It is updated after every touch update.
@@ -47,6 +47,10 @@
 @property (nonatomic, readwrite, retain) IBOutlet DrawView *viewDraw;
 @property (nonatomic, readwrite, retain) IBOutlet UISegmentedControl *modeSwitch;
 
+/**
+ * Mode switch 
+ */
+-(IBAction)modeSwitch;
 
 @end
 

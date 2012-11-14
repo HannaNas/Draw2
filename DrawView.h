@@ -17,7 +17,12 @@
  * @param touch The dot
  * @param first Flag
  */
-- (void) userTouch:(Dot *)touch isFirst:(BOOL)first;
+- (void)userTouch:(Dot *)touch isFirst:(BOOL)first;
+
+/**
+ * End recording the new gesture
+ */
+- (void)endRecordingNewGesture;
 
 @end
 
@@ -39,12 +44,41 @@
      */
     NSMutableArray *drawableGestures;
     
+    /**
+     * Recognizing flag
+     */
+    BOOL recognizing;
+    
+    /**
+     * Recording flag
+     */
+    BOOL recording;
+    
+    /**
+     * Finish Recognizing flag
+     */
+    BOOL finishRecognizing;
 }
 
 /*
  * Delegate
  */
 @property (nonatomic, readwrite, assign) id<DrawViewDelegate> delegate;
+
+/*
+ * Recognizing flag
+ */
+@property (nonatomic, readwrite, assign) BOOL recognizing;
+
+/*
+ * Recording flag
+ */
+@property (nonatomic, readwrite, assign) BOOL recording;
+
+/*
+ * Finish recognizing flag
+ */
+@property (nonatomic, readwrite, assign) BOOL finishRecognizing;
 
 /**
  * Receives the gesture and posible gestures where the user gesture can be contained and prints them
@@ -53,5 +87,6 @@
  * @param possibleGestures The possible gestures
  */
 - (void)drawUserGesture:(NSArray *)userGesture forPossibleGesutures:(NSArray *)possibleGestures;
+
 
 @end
