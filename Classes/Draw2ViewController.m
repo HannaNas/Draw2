@@ -301,7 +301,9 @@
 - (void)samplingDotsToNewTouch:(Dot *)dot {
     
     CGFloat distance = [Tools distanceBetweenPoint:[userGesture lastObject] andPoint:dot];
-
+    
+    NSLog(@"distance: %f", distance);
+    
     if (distance ==  SAMPLING_DISTANCE) {
         
         [userGesture addObject:dot];
@@ -336,6 +338,7 @@
  */
 - (void)updateDrawableGestures {
 
+    NSLog(@"Try to updateDrawableGestures");
     NSMutableArray *auxDrawableGesturesArray = [[[NSMutableArray alloc] init] autorelease];
     
     Dot *lastDot = [userGesture lastObject];

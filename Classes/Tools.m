@@ -25,8 +25,8 @@
  */
 +(CGFloat)distanceBetweenPoint:(Dot *)dot1 andPoint:(Dot *)dot2{
     
-    CGFloat dx =dot2.x -dot2.x;
-    CGFloat dy =dot1.y -dot2.y;
+    CGFloat dx =dot2.x - dot1.x;
+    CGFloat dy =dot2.y - dot1.y;
     CGFloat distance = sqrtf((dx*dx)+(dy*dy));
     return distance;
 }
