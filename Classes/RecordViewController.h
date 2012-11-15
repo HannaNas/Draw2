@@ -22,17 +22,36 @@
 
 @interface RecordViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>{
     
+    /**
+     * Picker
+     */
     IBOutlet UIPickerView *picker;
+    
+    /**
+     * Colors array
+     */
     NSMutableArray *colorsArray;
+    
+    /**
+     * Apps array
+     */
     NSMutableArray *appsArray;
     
+    /**
+     * Delegate
+     */
     id<RecordViewControllerDelegate>delegate;
-    
 
 }
 
+/**
+ * Picker
+ */
 @property (nonatomic, readwrite, retain) IBOutlet UIPickerView *picker;
-@property (nonatomic, readwrite, assign) id<RecordViewControllerDelegate>delegate;
 
+/**
+ * Delegate
+ */
+@property (nonatomic, readwrite, assign) id<RecordViewControllerDelegate>delegate;
 
 @end

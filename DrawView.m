@@ -93,7 +93,7 @@
         [delegate endRecordingNewGesture];
     }
 
-    if (recognizing) {
+    if (recognizing && finishRecognizing) {
     
         finishRecognizing = NO;
         [delegate recognitionFinished];

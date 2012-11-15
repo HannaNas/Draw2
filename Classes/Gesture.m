@@ -15,7 +15,7 @@
 
 @synthesize name;
 @synthesize color;
-@dynamic gesture;
+@synthesize gesture = auxGesture;
 
 #pragma mark Getters and Setters
 

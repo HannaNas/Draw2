@@ -184,8 +184,6 @@
     return NO;
 }
 
-
-
 /**
  * Sent to the view controller when the app receives a memory warning.
  */
@@ -200,7 +198,6 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
-
 
 #pragma mark -
 #pragma mark DrawViewDelegate
@@ -252,7 +249,7 @@
 
     }
     
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:recordViewController];
+    UINavigationController *navigationController = [[[UINavigationController alloc]initWithRootViewController:recordViewController] autorelease];
     [self presentViewController:navigationController animated:YES completion:nil];
 
 }
