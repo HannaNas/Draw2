@@ -5,9 +5,12 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 
 
+
 #import "DrawView.h"
+#import "Constants.h"
 #import "Dot.h"
 #import "Gesture.h"
+
 
 @implementation DrawView
 
@@ -132,7 +135,7 @@
     //set up context
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 10);
-    CGContextSetStrokeColorWithColor(context, UIColor.redColor.CGColor);
+    CGContextSetStrokeColorWithColor(context,  COLOR_RED);
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineCapRound);
     
@@ -160,7 +163,7 @@
     //finished drawing
     CGContextStrokePath(context);
     
-    CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, COLOR_YELLOW);
         
 //    for (NSArray *possibleGesture in drawableGestures) {
 //        
@@ -194,8 +197,9 @@
         
         int startingDot = [userPoints count];
         int count = [[possibleGesture gesture] count];
+        int stop = [userPoints count]+20;
         
-        while (startingDot < count) {
+        while (startingDot < count && startingDot < stop) {
             
             NSArray *array = [possibleGesture gesture];
             
@@ -208,8 +212,8 @@
                 CGContextAddLineToPoint(context, dot.x, dot.y);
             }
             
-            if (startingDot == (count-1)) {    //finished drawing
-                
+            if ((startingDot == (count-1)) || (startingDot == (stop-1))) {    //finished drawing
+
                 CGContextStrokePath(context);
             }
             

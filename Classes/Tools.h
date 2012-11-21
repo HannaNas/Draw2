@@ -42,4 +42,15 @@
                givenDot1:(Dot *)dot1
                     dot2:(Dot *)dot2;
 
+
+/**
+ * Returns true if the whole gesture fits in the ractangle
+ *
+ * @param gestre The gesture 
+ * @param rect the area
+ * @return true, if fits on screen
+ */
++(BOOL)gestureFitsOnScreen:(NSArray *)gesture inRect:(CGRect *) rect;
+
+
 @end
