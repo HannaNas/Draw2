@@ -7,6 +7,7 @@
 
 #import "DrawView.h"
 #import "Dot.h"
+#import "Gesture.h"
 
 @implementation DrawView
 
@@ -161,14 +162,44 @@
     
     CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
         
-    for (NSArray *possibleGesture in drawableGestures) {
+//    for (NSArray *possibleGesture in drawableGestures) {
+//        
+//        int startingDot = [userPoints count];
+//        int count = [possibleGesture count];
+//        
+//        while (startingDot < count) {
+//            
+//            Dot *dot = [possibleGesture objectAtIndex:startingDot];
+//            
+//            if (startingDot == [userPoints count]) {
+//                CGContextBeginPath(context);
+//                CGContextMoveToPoint(context, dot.x, dot.y);
+//            } else {
+//                CGContextAddLineToPoint(context, dot.x, dot.y);
+//            }
+//            
+//            if (startingDot == (count-1)) {    //finished drawing
+//
+//                CGContextStrokePath(context);
+//            }
+//            
+//            startingDot++;
+//            
+//        }
+//        
+//    }
+
+    
+    for (Gesture *possibleGesture in drawableGestures) {
         
         int startingDot = [userPoints count];
-        int count = [possibleGesture count];
+        int count = [[possibleGesture gesture] count];
         
         while (startingDot < count) {
             
-            Dot *dot = [possibleGesture objectAtIndex:startingDot];
+            NSArray *array = [possibleGesture gesture];
+            
+            Dot *dot = [array objectAtIndex:startingDot];
             
             if (startingDot == [userPoints count]) {
                 CGContextBeginPath(context);
@@ -178,7 +209,7 @@
             }
             
             if (startingDot == (count-1)) {    //finished drawing
-
+                
                 CGContextStrokePath(context);
             }
             
@@ -187,7 +218,7 @@
         }
         
     }
-
+    
 }
 
 /*

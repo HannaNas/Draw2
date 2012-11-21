@@ -9,6 +9,7 @@
 #import "Draw2ViewController.h"
 #import "Constants.h"
 #import "Dot.h"
+#import "Gesture.h"
 #import "RecordViewController.h"
 #import "Tools.h"
 #import "Vector.h"
@@ -155,8 +156,21 @@
     NSArray *array1 = [[[NSArray alloc] initWithObjects:dotG11, dotG12, dotG13, dotG14, nil] autorelease];
     NSArray *array2 = [[[NSArray alloc] initWithObjects:dotG21, dotG22, dotG23, dotG24, dotG25, dotG26, nil] autorelease];
     
-    predefinedGestureArray = [[NSMutableArray alloc] initWithObjects:array1, array2, nil];
+//    predefinedGestureArray = [[NSMutableArray alloc] initWithObjects:array1, array2, nil];
     
+    Gesture *gesture1 = [[Gesture alloc] init];
+    Gesture *gesture2 = [[Gesture alloc] init];
+    
+    [gesture1 setName:@"Gesture1"];
+    [gesture1 setColor:[UIColor blueColor]];
+    [gesture1 setGesture:array1];
+    
+    [gesture2 setName:@"Gesture2"];
+    [gesture2 setColor:[UIColor greenColor]];
+    [gesture2 setGesture:array2];
+    
+    predefinedGestureArray = [[NSMutableArray alloc] initWithObjects:gesture1, gesture2, nil];
+
     userGesture = [[NSMutableArray alloc] init];
     drawableGesturesArray = [[NSMutableArray alloc] init];
     
@@ -221,9 +235,23 @@
         
         // Brings all the predefined gestures to the user first tap
         
-        for (NSArray *gesture in predefinedGestureArray) {
+//        for (NSArray *gesture in predefinedGestureArray) {
+//            
+//            [drawableGesturesArray addObject:[self bringPosibleGesture:gesture toDot:touch]];
+//            
+//        }
+        
+        for (Gesture *gesture in predefinedGestureArray) {
             
-            [drawableGesturesArray addObject:[self bringPosibleGesture:gesture toDot:touch]];
+            NSArray *gestureToCheck = [NSArray arrayWithArray:[gesture gesture]];
+            NSArray *array = [self bringPosibleGesture:gestureToCheck toDot:touch];
+            
+            Gesture *gestureMoved = [[Gesture alloc] init];
+            [gestureMoved setName:[gesture name]];
+            [gestureMoved setColor:[gesture color]];
+            [gestureMoved setGesture:[[NSArray alloc] initWithArray:array]];
+                        
+            [drawableGesturesArray addObject:gestureMoved];
             
         }
         
@@ -290,7 +318,16 @@
 - (void)recordGestureWithColor:(NSString *)color applicationName:(NSString *)appName {
 
     if (![color isEqualToString:@""]) {
-        [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
+        
+        Gesture *gestureToSave = [[Gesture alloc] init];
+        [gestureToSave setName:@"NewGesture"];
+        [gestureToSave setColor:[UIColor redColor]];
+        [gestureToSave setGesture:[NSArray arrayWithArray:userGesture]];
+        
+        [predefinedGestureArray addObject:gestureToSave];
+
+        
+//        [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
         //TODO: set the color and the appName.
     }
 
@@ -424,9 +461,26 @@
         
         Dot *lastDot = [userGesture lastObject];
         
-        for (NSArray *gesture in drawableGesturesArray) {
+//        for (NSArray *gesture in drawableGesturesArray) {
+//            
+//            if ([self isPossibleDot:lastDot inGesture:gesture forPosition:([userGesture count] - 1)]) {
+//                
+//                [auxDrawableGesturesArray addObject:gesture];
+//                NSLog(@"Gesture admited");
+//                
+//            } else {
+//                
+//                NSLog(@"Gesture discarded");
+//                
+//            }
+//            
+//        }
+
+        for (Gesture *gesture in drawableGesturesArray) {
             
-            if ([self isPossibleDot:lastDot inGesture:gesture forPosition:([userGesture count] - 1)]) {
+            NSArray *array = [gesture gesture];
+            
+            if ([self isPossibleDot:lastDot inGesture:array forPosition:([userGesture count] - 1)]) {
                 
                 [auxDrawableGesturesArray addObject:gesture];
                 NSLog(@"Gesture admited");
@@ -448,7 +502,9 @@
     
         if ([drawableGesturesArray count] == 1) {
             
-            if ([[drawableGesturesArray objectAtIndex:0] count] == [userGesture count]) {
+            NSArray *checkGesture = [[drawableGesturesArray objectAtIndex:0] gesture];
+                                     
+            if ([checkGesture count] == [userGesture count]) {
                 
                 NSLog(@"GESTURE RECOGNIZED!!!");
                 viewDraw.finishRecognizing = YES;
