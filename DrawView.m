@@ -134,7 +134,7 @@
     //set up context
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 10);
-    CGContextSetStrokeColorWithColor(context,  COLOR_LIGHTGREEN);
+    CGContextSetStrokeColorWithColor(context,  COLOR_RED);
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineCapRound);
     
@@ -168,8 +168,9 @@
         
         int startingDot = [userPoints count];
         int count = [possibleGesture count];
+        int stop = [userPoints count]+20;
         
-        while (startingDot < count) {
+        while (startingDot < count && startingDot < stop) {
             
             Dot *dot = [possibleGesture objectAtIndex:startingDot];
             
@@ -180,7 +181,7 @@
                 CGContextAddLineToPoint(context, dot.x, dot.y);
             }
             
-            if (startingDot == (count-1)) {    //finished drawing
+            if ((startingDot == (count-1)) || (startingDot == (stop-1))) {    //finished drawing
 
                 CGContextStrokePath(context);
             }
