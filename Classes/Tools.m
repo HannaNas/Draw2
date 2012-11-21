@@ -94,5 +94,32 @@
     
 }
 
+
+
+/**
+ * Returns true if the whole gesture fits in the ractangle
+ *
+ * @param gestre The gesture
+ * @param rect the area
+ * @return true, if fits on screen
+ */
++(BOOL)gestureFitsOnScreen:(NSArray *)gesture inRect:(CGRect *) rect{
+    
+    BOOL outside = NO;
+    int count = 0;
+    
+    while (!outside && count < [gesture count]) {
+        Dot* dot = [gesture objectAtIndex:count];
+        outside = !((dot.x > rect->origin.x) &&
+                    (dot.x < rect->origin.x + rect->size.width) &&
+                    ((dot.y > rect->origin.y)&&
+                     (dot.y < rect->origin.y + rect->size.height)));
+        count++;
+
+    }
+
+    return !outside;
+}
+
 @end
 
