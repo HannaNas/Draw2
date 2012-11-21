@@ -5,8 +5,11 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 
 
+
 #import "DrawView.h"
+#import "Constants.h"
 #import "Dot.h"
+
 
 @implementation DrawView
 
@@ -131,7 +134,7 @@
     //set up context
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 10);
-    CGContextSetStrokeColorWithColor(context, UIColor.redColor.CGColor);
+    CGContextSetStrokeColorWithColor(context,  COLOR_LIGHTGREEN);
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineCapRound);
     
@@ -159,7 +162,7 @@
     //finished drawing
     CGContextStrokePath(context);
     
-    CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, COLOR_YELLOW);
         
     for (NSArray *possibleGesture in drawableGestures) {
         
