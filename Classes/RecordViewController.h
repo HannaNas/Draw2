@@ -16,7 +16,7 @@
  * @param color The color name
  * @param appName The application name
  */
-- (void)recordGestureWithColor:(NSString *)color applicationName:(NSString *)appName;
+- (void)recordGestureWithColor:(UIColor *)color applicationName:(NSString *)appName;
 
 @end
 
@@ -26,6 +26,11 @@
      * Picker
      */
     IBOutlet UIPickerView *picker;
+    
+    /**
+     * Advice label
+     */
+    IBOutlet UILabel *adviceLabel;
     
     /**
      * Colors array
@@ -53,5 +58,10 @@
  * Delegate
  */
 @property (nonatomic, readwrite, assign) id<RecordViewControllerDelegate>delegate;
+
+/**
+ * Advice label
+ */
+@property (nonatomic, readwrite, retain) IBOutlet UILabel *adviceLabel;
 
 @end

@@ -135,7 +135,7 @@
     //set up context
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 10);
-    CGContextSetStrokeColorWithColor(context,  COLOR_RED);
+    CGContextSetStrokeColorWithColor(context, COLOR_YELLOW.CGColor);
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineCapRound);
     
@@ -162,42 +162,15 @@
     
     //finished drawing
     CGContextStrokePath(context);
-    
-    CGContextSetStrokeColorWithColor(context, COLOR_YELLOW);
         
-//    for (NSArray *possibleGesture in drawableGestures) {
-//        
-//        int startingDot = [userPoints count];
-//        int count = [possibleGesture count];
-//        
-//        while (startingDot < count) {
-//            
-//            Dot *dot = [possibleGesture objectAtIndex:startingDot];
-//            
-//            if (startingDot == [userPoints count]) {
-//                CGContextBeginPath(context);
-//                CGContextMoveToPoint(context, dot.x, dot.y);
-//            } else {
-//                CGContextAddLineToPoint(context, dot.x, dot.y);
-//            }
-//            
-//            if (startingDot == (count-1)) {    //finished drawing
-//
-//                CGContextStrokePath(context);
-//            }
-//            
-//            startingDot++;
-//            
-//        }
-//        
-//    }
-
-    
     for (Gesture *possibleGesture in drawableGestures) {
         
         int startingDot = [userPoints count];
         int count = [[possibleGesture gesture] count];
-        int stop = [userPoints count]+20;
+        int stop = [userPoints count] + 20;
+        UIColor *color = [possibleGesture color];
+    
+        CGContextSetStrokeColorWithColor(context, color.CGColor);
         
         while (startingDot < count && startingDot < stop) {
             
@@ -215,6 +188,7 @@
             if ((startingDot == (count-1)) || (startingDot == (stop-1))) {    //finished drawing
 
                 CGContextStrokePath(context);
+                
             }
             
             startingDot++;

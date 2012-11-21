@@ -18,6 +18,8 @@
 		2899E5220DE3E06400AC0155 /* Draw2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* Draw2ViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* Draw2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* Draw2ViewController.m */; };
+		57627C74165D216E00A0A2E8 /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 57627C73165D216E00A0A2E8 /* Color.m */; };
+		57627C78165D227400A0A2E8 /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 57627C77165D227400A0A2E8 /* Application.m */; };
 		57CCD52E16373F20004FB8CD /* Vector.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CCD52D16373F20004FB8CD /* Vector.m */; };
 		57CD24C516427DDB000DA10A /* Gesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CD24C416427DDB000DA10A /* Gesture.m */; };
 		670D95831654356900A019E0 /* RecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 670D95811654356900A019E0 /* RecordViewController.m */; };
@@ -43,6 +45,10 @@
 		28D7ACF70DDB3853001CB0EB /* Draw2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Draw2ViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Draw2_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Draw2_Prefix.pch; sourceTree = "<group>"; };
+		57627C72165D216E00A0A2E8 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
+		57627C73165D216E00A0A2E8 /* Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Color.m; sourceTree = "<group>"; };
+		57627C76165D227300A0A2E8 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		57627C77165D227400A0A2E8 /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
 		57CCD5281637208D004FB8CD /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		57CCD52C16373F20004FB8CD /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		57CCD52D16373F20004FB8CD /* Vector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vector.m; sourceTree = "<group>"; };
@@ -73,7 +79,11 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				57627C76165D227300A0A2E8 /* Application.h */,
+				57627C77165D227400A0A2E8 /* Application.m */,
 				57CCD5281637208D004FB8CD /* Constants.h */,
+				57627C72165D216E00A0A2E8 /* Color.h */,
+				57627C73165D216E00A0A2E8 /* Color.m */,
 				0EA5BEC31360212300CB42F7 /* DrawView.h */,
 				0EA5BEC41360212300CB42F7 /* DrawView.m */,
 				1D3623240D0F684500981E51 /* Draw2AppDelegate.h */,
@@ -220,6 +230,8 @@
 				57CCD52E16373F20004FB8CD /* Vector.m in Sources */,
 				57CD24C516427DDB000DA10A /* Gesture.m in Sources */,
 				670D95831654356900A019E0 /* RecordViewController.m in Sources */,
+				57627C74165D216E00A0A2E8 /* Color.m in Sources */,
+				57627C78165D227400A0A2E8 /* Application.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
