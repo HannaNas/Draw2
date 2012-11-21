@@ -27,3 +27,8 @@
  * Defines the color red
  */
 #define COLOR_RED                                                       [UIColor redColor]
+
+/**
+ * Defines the color red
+ */
+#define COLOR_BLUE                                                       CGColorCreateGenericRGB(0.000f, 0.000f, 0.000f, 1.0f)
