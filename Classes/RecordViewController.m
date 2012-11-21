@@ -11,6 +11,7 @@
 #import "Application.h"
 #import "Color.h"
 #import "Constants.h"
+#import "Gesture.h"
 
 @interface RecordViewController ()
 
@@ -34,6 +35,7 @@
 @synthesize picker;
 @synthesize delegate;
 @synthesize adviceLabel;
+@synthesize gesturesArray = auxGesturesArray;
 
 #pragma mark -
 #pragma mark Memory management
@@ -51,6 +53,12 @@
     
     [adviceLabel release];
     adviceLabel = nil;
+    
+    [availableAppsArray release];
+    availableAppsArray = nil;
+    
+    [availableColorsArray release];
+    availableColorsArray = nil;
     
     delegate = nil;
     
@@ -148,6 +156,9 @@
     colorsArray = [[NSMutableArray alloc]initWithObjects: color1, color2, color3, color4, color5, color6, color7, nil];
     appsArray = [[NSMutableArray alloc]initWithObjects:app1, app2, app3, app4, app5, app6, app7, nil];
     
+    availableColorsArray = [[NSMutableArray alloc] initWithArray:colorsArray];
+    availableAppsArray = [[NSMutableArray alloc] initWithArray:appsArray];
+    
     self.navigationItem.title = @"Record Gesture";
     
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]
@@ -161,6 +172,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
 
+    [super viewWillAppear:animated];
+    [picker reloadAllComponents];
 
 }
 
@@ -197,10 +210,10 @@
  */
 - (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
     if(component==0){
-        return [colorsArray count];
+        return [availableColorsArray count];
     }
     else{
-        return [appsArray count];
+        return [availableAppsArray count];
     }
 }
 
@@ -214,10 +227,10 @@
  */
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
     if(component==0){
-        return [[colorsArray objectAtIndex:row] colorName];
+        return [[availableColorsArray objectAtIndex:row] colorName];
     }
     else{
-        return [[appsArray objectAtIndex:row] appName];
+        return [[availableAppsArray objectAtIndex:row] appName];
     }
 }
 
@@ -231,14 +244,14 @@
 
     if (component == 0) {
         
-        [resultView setBackgroundColor:[[colorsArray objectAtIndex:row] color]];
+        [resultView setBackgroundColor:[[availableColorsArray objectAtIndex:row] color]];
         
     } else {
     
         [resultView setBackgroundColor:[UIColor clearColor]];
         UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)] autorelease];
         [label setBackgroundColor:[UIColor clearColor]];
-        [label setText:[[appsArray objectAtIndex:row] appName]];
+        [label setText:[[availableAppsArray objectAtIndex:row] appName]];
         [label setTextColor:[UIColor blackColor]];
         [resultView addSubview:label];
 
@@ -272,6 +285,52 @@
     [delegate recordGestureWithColor:[color color]
                      applicationName:[app schema]];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+/**
+ * Gestures array setter 
+ */
+- (void) setGesturesArray:(NSArray *)gesturesArray {
+
+    if (auxGesturesArray == nil) {
+        auxGesturesArray = [[NSMutableArray alloc] init];
+    }
+    
+    [auxGesturesArray removeAllObjects];
+    [auxGesturesArray addObjectsFromArray:gesturesArray];
+    
+    [availableColorsArray removeAllObjects];
+    [availableColorsArray addObjectsFromArray:colorsArray];
+    
+    [availableAppsArray removeAllObjects];
+    [availableAppsArray addObjectsFromArray:appsArray];
+    
+    for (Gesture *gesture in gesturesArray) {
+        
+        for (Color *color in colorsArray) {
+        
+            if ([gesture color] == [color color]) {
+                
+                [availableColorsArray removeObject:color];
+                
+            }
+        
+        }
+        
+        for (Application *app in appsArray) {
+            
+            if ([gesture name] == [app schema]) {
+                
+                [availableAppsArray removeObject:app];
+                
+            }
+            
+        }
+        
+    }
+        
+    [picker reloadAllComponents];
+    
 }
 
 

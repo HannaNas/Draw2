@@ -62,6 +62,11 @@
  */
 - (void)updateDrawableGestures;
 
+/**
+ * Clean
+ */
+-(void)clean;
+
 @end
 
 #pragma mark -
@@ -99,6 +104,8 @@
     
     [recordViewController release];
     recordViewController = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:UIApplicationDidBecomeActiveNotification];
     
     [super dealloc];
 }
@@ -188,12 +195,27 @@
  * @param animated If YES, the view is being added to the window using an animation.
  */
 -(void)viewWillAppear:(BOOL)animated {
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(clean)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
 
     [super viewWillAppear:animated];
     [self modeSwitch];
     viewDraw.delegate = self;
 
 }
+
+/**
+ * Notifies the view controller that its view is about to be removed from a view hierarchy.
+ */
+-(void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+    
+}
+
 
 /**
  * Returns a Boolean value indicating whether the view controller supports the specified orientation.
@@ -212,10 +234,6 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
 
 #pragma mark -
 #pragma mark DrawViewDelegate
@@ -280,6 +298,8 @@
         recordViewController.delegate = self;
 
     }
+    
+    [recordViewController setGesturesArray:predefinedGestureArray];
     
     UINavigationController *navigationController = [[[UINavigationController alloc]initWithRootViewController:recordViewController] autorelease];
     [self presentViewController:navigationController animated:YES completion:nil];
@@ -494,6 +514,15 @@
     }
     
     
+}
+
+/**
+ * Clean
+ */
+-(void)clean {
+
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+
 }
 
 /*

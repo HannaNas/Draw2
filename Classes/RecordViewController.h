@@ -36,6 +36,11 @@
      * Colors array
      */
     NSMutableArray *colorsArray;
+
+    /**
+     * Available colors array
+     */
+    NSMutableArray *availableColorsArray;
     
     /**
      * Apps array
@@ -43,10 +48,20 @@
     NSMutableArray *appsArray;
     
     /**
+     * Available apps array
+     */
+    NSMutableArray *availableAppsArray;
+    
+    /**
      * Delegate
      */
     id<RecordViewControllerDelegate>delegate;
 
+    /**
+     * Gestures array. To check apps and colors in use
+     */
+    NSMutableArray *auxGesturesArray;
+    
 }
 
 /**
@@ -63,5 +78,10 @@
  * Advice label
  */
 @property (nonatomic, readwrite, retain) IBOutlet UILabel *adviceLabel;
+
+/**
+ * Gestures array
+ */
+@property (nonatomic, readwrite, retain) NSArray *gesturesArray;
 
 @end
