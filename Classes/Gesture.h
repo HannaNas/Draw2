@@ -8,17 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+#import "Application.h"
+#import "Color.h"
+
 @interface Gesture : NSObject {
 
     /**
      * The name identifier
      */
-    NSString *name;
+    Application *app;
 
     /**
      * The color
      */
-    UIColor *color;
+    Color *color;
     
     /**
      * The array of Dots
@@ -27,9 +30,9 @@
 
 }
 
-@property (nonatomic, readwrite, copy) NSString *name;
+@property (nonatomic, readwrite, retain) Application *app;
 
-@property (nonatomic, readwrite, retain) UIColor *color;
+@property (nonatomic, readwrite, retain) Color *color;
 
 @property (nonatomic, readonly, retain) NSArray *gesture;
 

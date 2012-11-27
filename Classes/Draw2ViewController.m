@@ -7,6 +7,9 @@
 //
 
 #import "Draw2ViewController.h"
+
+#import "Application.h"
+#import "Color.h"
 #import "Constants.h"
 #import "Dot.h"
 #import "Gesture.h"
@@ -203,7 +206,7 @@
     [super viewWillAppear:animated];
     [self modeSwitch];
     viewDraw.delegate = self;
-
+    [viewDraw setBackgroundColor:[UIColor whiteColor]];
 }
 
 /**
@@ -267,7 +270,7 @@
             if ([Tools gestureFitsOnScreen:array inRect:&frame]) {
             
                 Gesture *gestureMoved = [[[Gesture alloc] init] autorelease];
-                [gestureMoved setName:[gesture name]];
+                [gestureMoved setApp:[gesture app]];
                 [gestureMoved setColor:[gesture color]];
                 [gestureMoved setGesture:[[NSArray alloc] initWithArray:array]];
                 
@@ -315,7 +318,7 @@
 //    http://wiki.akosma.com/IPhone_URL_Schemes#Facebook
     
     Gesture *gesture = [drawableGesturesArray objectAtIndex:0];
-    NSString *schema = [gesture name];
+    NSString *schema = [[gesture app] schema];
     
     NSURL *urlString = [NSURL URLWithString:schema];
     
@@ -329,12 +332,12 @@
 /**
  * Record gesture
  */
-- (void)recordGestureWithColor:(UIColor *)color applicationName:(NSString *)appName {
+- (void)recordGestureWithColor:(Color *)color applicationName:(Application *)appName {
 
-    if (![appName isEqualToString:@""]) {
+    if (appName != nil) {
         
         Gesture *gestureToSave = [[[Gesture alloc] init] autorelease];
-        [gestureToSave setName:appName];
+        [gestureToSave setApp:appName];
         [gestureToSave setColor:color];
         [gestureToSave setGesture:[NSArray arrayWithArray:userGesture]];
         

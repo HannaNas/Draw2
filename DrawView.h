@@ -63,6 +63,11 @@
      * Finish Recognizing flag
      */
     BOOL finishRecognizing;
+    
+    /**
+     * App icons
+     */
+    NSMutableArray *appIcons;
 }
 
 /*

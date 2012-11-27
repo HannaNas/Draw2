@@ -12,6 +12,7 @@
 #import "Color.h"
 #import "Constants.h"
 #import "Gesture.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface RecordViewController ()
 
@@ -94,7 +95,7 @@
 
     Color *color1 = [[[Color alloc] init] autorelease];
     [color1 setColorName:@"blue"];
-    [color1 setColor:COLOR_LILA];
+    [color1 setColor:COLOR_BLUE];
     
     Color *color2 = [[[Color alloc] init] autorelease];
     [color2 setColorName:@"lila"];
@@ -113,17 +114,18 @@
     [color5 setColor:COLOR_DARKGREEN];
     
     Color *color6 = [[[Color alloc] init] autorelease];
-    [color6 setColorName:@"dark red"];
-    [color6 setColor:COLOR_DARKRED];
+    [color6 setColorName:@"orange"];
+    [color6 setColor:COLOR_ORANGE];
     
     Color *color7 = [[[Color alloc] init] autorelease];
-    [color7 setColorName:@"dark blue"];
-    [color7 setColor:COLOR_DARKBLUE];
+    [color7 setColorName:@"ocre"];
+    [color7 setColor:COLOR_PINK];
     
     Application *app1 = [[[Application alloc] init] autorelease];
     [app1 setAppName:@"Safari"];
     [app1 setSchema:@"http://www.u-psud.fr"];
-    
+    [app1 setAppImageName:@"Safari.png"];
+
     Application *app2 = [[[Application alloc] init] autorelease];
     [app2 setAppName:@"Maps"];
      NSString *title = @"title";
@@ -132,28 +134,34 @@
      int zoom = 13;
      NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
     [app2 setSchema:stringURL];
-    
+    [app2 setAppImageName:@"Maps.jpg"];
+
     Application *app3 = [[[Application alloc] init] autorelease];
     [app3 setAppName:@"Phone"];
     [app3 setSchema:@"tel:0695442388"];
-    
+    [app3 setAppImageName:@"Phone.jpg"];
+
     Application *app4 = [[[Application alloc] init] autorelease];
     [app4 setAppName:@"SMS"];
     [app4 setSchema:@"sms:0695442388"];
-    
+    [app4 setAppImageName:@"Phone.jpg"];
+
     Application *app5 = [[[Application alloc] init] autorelease];
     [app5 setAppName:@"Mail"];
     [app5 setSchema:@"mailto:test@example.com"];
-    
+    [app5 setAppImageName:@"Mail.png"];
+
     Application *app6 = [[[Application alloc] init] autorelease];
     [app6 setAppName:@"iTunes"];
     [app6 setSchema:@"music:"];
-    
+    [app6 setAppImageName:@"iTunes.jpg"];
+
     Application *app7 = [[[Application alloc] init] autorelease];
     [app7 setAppName:@"App Store"];
     [app7 setSchema:@"http://itunes.apple.com/"];
-    
-    colorsArray = [[NSMutableArray alloc]initWithObjects: color1, color2, color3, color4, color5, color6, color7, nil];
+    [app7 setAppImageName:@"AppStore.jpg"];
+
+    colorsArray = [[NSMutableArray alloc]initWithObjects: color1, color2, color7, color3, color6, color4, color5, nil];
     appsArray = [[NSMutableArray alloc]initWithObjects:app1, app2, app3, app4, app5, app6, app7, nil];
     
     availableColorsArray = [[NSMutableArray alloc] initWithArray:colorsArray];
@@ -246,14 +254,25 @@
         
         [resultView setBackgroundColor:[[availableColorsArray objectAtIndex:row] color]];
         
+        
     } else {
     
         [resultView setBackgroundColor:[UIColor clearColor]];
-        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)] autorelease];
-        [label setBackgroundColor:[UIColor clearColor]];
-        [label setText:[[availableAppsArray objectAtIndex:row] appName]];
-        [label setTextColor:[UIColor blackColor]];
-        [resultView addSubview:label];
+//        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)] autorelease];
+//        [label setBackgroundColor:[UIColor clearColor]];
+//        [label setText:[[availableAppsArray objectAtIndex:row] appName]];
+//        [label setTextColor:[UIColor blackColor]];
+//        [resultView addSubview:label];
+        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(40, 0, 35, 35)] autorelease];
+        Application *app = [availableAppsArray objectAtIndex:row];
+        UIImage *image = [UIImage imageNamed:[app appImageName]];
+        
+        [imageView setImage:image];
+        imageView.layer.cornerRadius = 9.0;
+        imageView.layer.masksToBounds = YES;
+        imageView.layer.borderColor = [UIColor blackColor].CGColor;
+        imageView.layer.borderWidth = 0.0;
+        [resultView addSubview:imageView];
 
     }
     
@@ -269,8 +288,8 @@
  * Performs the cancel button action
  */
 - (void) cancelButton{
-    [delegate recordGestureWithColor:COLOR_YELLOW
-                     applicationName:@""];
+    [delegate recordGestureWithColor:nil
+                     applicationName:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -279,11 +298,11 @@
  */
 - (void) saveButton{
     
-    Color *color = [colorsArray objectAtIndex:[picker selectedRowInComponent:0]];
-    Application *app = [appsArray objectAtIndex:[picker selectedRowInComponent:1]];
+    Color *color = [availableColorsArray objectAtIndex:[picker selectedRowInComponent:0]];
+    Application *app = [availableAppsArray objectAtIndex:[picker selectedRowInComponent:1]];
 
-    [delegate recordGestureWithColor:[color color]
-                     applicationName:[app schema]];
+    [delegate recordGestureWithColor:color
+                     applicationName:app];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -309,7 +328,7 @@
         
         for (Color *color in colorsArray) {
         
-            if ([gesture color] == [color color]) {
+            if ([[gesture color] color] == [color color]) {
                 
                 [availableColorsArray removeObject:color];
                 
@@ -319,7 +338,7 @@
         
         for (Application *app in appsArray) {
             
-            if ([gesture name] == [app schema]) {
+            if ([[[gesture app] appName] isEqualToString:[app appName]]) {
                 
                 [availableAppsArray removeObject:app];
                 

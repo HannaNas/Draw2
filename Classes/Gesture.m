@@ -13,7 +13,7 @@
 #pragma mark -
 #pragma mark Properties
 
-@synthesize name;
+@synthesize app;
 @synthesize color;
 @synthesize gesture = auxGesture;
 

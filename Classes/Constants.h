@@ -31,7 +31,7 @@
 /**
  * Defines the color lila
  */
-#define COLOR_LILA          [UIColor colorWithRed:69.0/255.0 green:39.0/255.0 blue:67.0/255.0 alpha:1.0]
+#define COLOR_LILA          [UIColor colorWithRed:147.0/255.0 green:139.0/255.0 blue:186.0/255.0 alpha:1.0]
 
 /**
  * Defines the color red
@@ -39,9 +39,9 @@
 #define COLOR_RED           [UIColor colorWithRed:231.0/255.0 green:99.0/255.0 blue:94.0/255.0 alpha:1.0]
 
 /**
- * Defines the color yellow
+ * Defines the color gray
  */
-#define COLOR_YELLOW        [UIColor colorWithRed:248.0/255.0 green:233.0/255.0 blue:168.0/255.0 alpha:1.0]
+#define COLOR_GRAY          [UIColor colorWithRed:214.0/255.0 green:209.0/255.0 blue:205.0/255.0 alpha:1.0]
 
 /**
  * Defines the color light green
@@ -54,12 +54,12 @@
 #define COLOR_DARKGREEN     [UIColor colorWithRed:0.0/255.0 green:146.0/255.0 blue:140.0/255.0 alpha:1.0]
 
 /**
- * Defines the color dark red
+ * Defines the color orange
  */
-#define COLOR_DARKRED       [UIColor colorWithRed:127.0/255.0 green:0.0/255.0 blue:17.0/255.0 alpha:1.0]
+#define COLOR_ORANGE        [UIColor colorWithRed:223.0/255.0 green:160.0/255.0 blue:93.0/255.0 alpha:1.0]
 
 /**
- * Defines the color dark blue
+ * Defines the color pink
  */
-#define COLOR_DARKBLUE      [UIColor colorWithRed:4.0/255.0 green:31.0/255.0 blue:67.0/255.0 alpha:1.0]
+#define COLOR_PINK          [UIColor colorWithRed:196.0/255.0 green:133.0/255.0 blue:176.0/255.0 alpha:1.0]
 

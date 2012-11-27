@@ -8,15 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Application.h"
+#import "Color.h"
+
 @protocol RecordViewControllerDelegate
 
 /**
  * Record gesture
  *
- * @param color The color name
- * @param appName The application name
+ * @param color The color
+ * @param appName The application
  */
-- (void)recordGestureWithColor:(UIColor *)color applicationName:(NSString *)appName;
+- (void)recordGestureWithColor:(Color *)color applicationName:(Application *)appName;
 
 @end
 

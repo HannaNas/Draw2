@@ -7,9 +7,12 @@
 
 
 #import "DrawView.h"
+
+#import "Application.h"
 #import "Constants.h"
 #import "Dot.h"
 #import "Gesture.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @implementation DrawView
@@ -102,26 +105,6 @@
         finishRecognizing = NO;
         [delegate recognitionFinished];
     }
-    
-//    if(event.allTouches.count ==1){
-//		
-//		//NSLog(@"One Touch");
-//		NSArray *touches = [event.allTouches allObjects];
-//		CGPoint pointOne = [[touches objectAtIndex:0]locationInView:self];
-//        
-//		float xT = pointOne.x;
-//		float yT = pointOne.y;
-//        Dot *dot = [[Dot alloc]init];
-//        dot.x = xT;
-//        dot.y = yT;
-//        
-//        NSLog(@"touchesEnded Point (%f, %f)", xT, yT);
-//        
-//        [delegate userTouch:dot isFirst:NO];
-//        [dot release];
-//        
-//		//[self setNeedsDisplay];
-//	}
 
 }
 
@@ -135,7 +118,7 @@
     //set up context
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 10);
-    CGContextSetStrokeColorWithColor(context, COLOR_YELLOW.CGColor);
+    CGContextSetStrokeColorWithColor(context, COLOR_GRAY.CGColor);
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineCapRound);
     
@@ -168,7 +151,7 @@
         int startingDot = [userPoints count];
         int count = [[possibleGesture gesture] count];
         int stop = [userPoints count] + 20;
-        UIColor *color = [possibleGesture color];
+        UIColor *color = [[possibleGesture color] color];
     
         CGContextSetStrokeColorWithColor(context, color.CGColor);
         
@@ -186,8 +169,20 @@
             }
             
             if ((startingDot == (count-1)) || (startingDot == (stop-1))) {    //finished drawing
-
+                
                 CGContextStrokePath(context);
+                
+                UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(dot.x, dot.y, 40, 40)] autorelease];
+                UIImage *image = [UIImage imageNamed:[[possibleGesture app] appImageName]];
+                
+                [imageView setImage:image];
+                imageView.layer.cornerRadius = 9.0;
+                imageView.layer.masksToBounds = YES;
+                imageView.layer.borderColor = color.CGColor;
+                imageView.layer.borderWidth = 2.0;
+                
+                [appIcons addObject:imageView];
+                [self addSubview:imageView];
                 
             }
             
@@ -223,6 +218,20 @@
     [drawableGestures removeAllObjects];
     [drawableGestures addObjectsFromArray:possibleGestures];
     
+    if (appIcons == nil) {
+    
+        appIcons = [[NSMutableArray alloc] init];
+    
+    }
+    
+    for (UIImageView *imgView in appIcons) {
+        
+        [imgView removeFromSuperview];
+        
+    }
+    
+    [appIcons removeAllObjects];
+    
     [self setNeedsDisplay];
         
 }
@@ -239,6 +248,9 @@
     drawableGestures = nil;
     
     delegate_ = nil;
+    
+    [appIcons release];
+    appIcons = nil;
     
     [super dealloc];
     

@@ -15,5 +15,6 @@
 
 @synthesize appName;
 @synthesize schema;
+@synthesize appImageName;
 
 @end

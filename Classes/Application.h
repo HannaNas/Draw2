@@ -20,11 +20,17 @@
      */
     NSString *schema;
     
+    /**
+     * Application image name
+     */
+    NSString *appImageName;
+    
 }
 
 @property (nonatomic, readwrite, copy) NSString *appName;
 
 @property (nonatomic, readwrite, copy) NSString *schema;
 
+@property (nonatomic, readwrite, copy) NSString *appImageName;
 
 @end
