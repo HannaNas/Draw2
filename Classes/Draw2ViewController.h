@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "DrawView.h"
 #import "RecordViewController.h"
+#import "RemoveGestureViewController.h"
 #import "Vector.h"
 
 
-@interface Draw2ViewController : UIViewController <DrawViewDelegate, RecordViewControllerDelegate> {
+@interface Draw2ViewController : UIViewController <DrawViewDelegate, RecordViewControllerDelegate, RemoveGestureViewControllerDelegate> {
     
     /*
      * The draw view
@@ -23,6 +24,11 @@
      * Mode switch
      */
     IBOutlet UISegmentedControl *modeSwitch;
+    
+    /**
+     * Options button
+     */
+    UIButton *optionsButton;
     
     /*
      * The users gesture to compare with possible gestures
@@ -49,12 +55,22 @@
      */
     RecordViewController *recordViewController;
     
+    /**
+     * Remove Gesture View Controller
+     */
+    RemoveGestureViewController *removeGestureViewController;
+    
 }
 
 /**
  * Defines the viewDraw and exports it to the IB
  */
 @property (nonatomic, readwrite, retain) IBOutlet DrawView *viewDraw;
+
+/**
+ * Defines the optionsButton and exports it to the IB
+ */
+@property (nonatomic, readwrite, retain) IBOutlet UIButton *optionsButton;
 
 /**
  * Defines the modeSwitch and exports it to the IB
@@ -65,6 +81,11 @@
  * Mode switch 
  */
 -(IBAction)modeSwitch;
+
+/**
+ * Options
+ */
+-(IBAction)optionsTapped;
 
 @end
 

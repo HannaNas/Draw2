@@ -17,6 +17,8 @@
 #import "Tools.h"
 #import "Vector.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface Draw2ViewController ()
 
 /**
@@ -81,6 +83,7 @@
 
 @synthesize viewDraw;
 @synthesize modeSwitch;
+@synthesize optionsButton;
 
 #pragma mark -
 #pragma mark Memory management
@@ -107,6 +110,9 @@
     
     [recordViewController release];
     recordViewController = nil;
+    
+    [removeGestureViewController release];
+    removeGestureViewController = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:UIApplicationDidBecomeActiveNotification];
     
@@ -187,7 +193,10 @@
     
     userGesture = [[NSMutableArray alloc] init];
     drawableGesturesArray = [[NSMutableArray alloc] init];
-    
+
+    optionsButton.layer.cornerRadius = 5.0;
+    optionsButton.layer.masksToBounds = YES;
+
 //    viewDraw.delegate = self;
     
 }
@@ -207,6 +216,8 @@
     [self modeSwitch];
     viewDraw.delegate = self;
     [viewDraw setBackgroundColor:[UIColor whiteColor]];
+    
+    [optionsButton setEnabled:([predefinedGestureArray count] > 0)];
 }
 
 /**
@@ -343,12 +354,32 @@
         
         [predefinedGestureArray addObject:gestureToSave];
 
-        
-//        [predefinedGestureArray addObject:[NSArray arrayWithArray:userGesture]];
-        //TODO: set the color and the appName.
     }
-
+    
     [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+    [optionsButton setEnabled:([drawableGesturesArray count] > 0)];
+
+}
+
+#pragma mark -
+#pragma mark RemoveGestureViewControllerDelegate
+
+/**
+ * Gestures remove result transmits the array of gestures that will stay
+ *
+ * @param array The array of gestures
+ */
+- (void)gesturesRemovedResult:(NSArray *)array {
+
+    if (array != nil) {
+        
+        [predefinedGestureArray removeAllObjects];
+        [predefinedGestureArray addObjectsFromArray:array];
+        
+    }
+    
+    [optionsButton setEnabled:([predefinedGestureArray count] > 0)];
+
 }
 
 #pragma mark -
@@ -539,5 +570,42 @@
     [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
     
 }
+
+/**
+ * Options
+ */
+-(IBAction)optionsTapped {
+
+    if (removeGestureViewController != nil) {
+        
+        [removeGestureViewController release];
+        removeGestureViewController = nil;
+    }
+    
+    
+    
+//    if (removeGestureViewController == nil) {
+    
+        removeGestureViewController = [[RemoveGestureViewController alloc] init];
+        removeGestureViewController.delegate = self;
+        
+//    }
+    
+    [removeGestureViewController setGesturesArray:predefinedGestureArray];
+
+    
+    UINavigationController *navigationController = [[[UINavigationController alloc]initWithRootViewController:removeGestureViewController] autorelease];
+    [self presentViewController:navigationController
+                       animated:YES
+                     completion:nil];
+//    [self.navigationController pushViewController:removeGestureViewController
+//                                            animated:YES];
+    
+    
+}
+
+
+
+
 
 @end

@@ -253,7 +253,10 @@
     if (component == 0) {
         
         [resultView setBackgroundColor:[[availableColorsArray objectAtIndex:row] color]];
-        
+        resultView.layer.cornerRadius = 9.0;
+        resultView.layer.masksToBounds = YES;
+        resultView.layer.borderColor = [UIColor blackColor].CGColor;
+        resultView.layer.borderWidth = 0.0;
         
     } else {
     

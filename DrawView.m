@@ -14,6 +14,21 @@
 #import "Gesture.h"
 #import <QuartzCore/QuartzCore.h>
 
+@interface DrawView ()
+
+/**
+ * Returns the image position inside the view
+ *
+ * @param dot The Dot
+ * @return The image position
+ */
+-(Dot *)placeImageGivenDot:(Dot *)dot;
+
+@end
+
+#pragma mark -
+#pragma mark DrawView
+
 
 @implementation DrawView
 
@@ -95,7 +110,7 @@
  */
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (recording) {
+    if (recording && ([userPoints count] > 5)) {
         NSLog(@"YOU HAVE FINISHED YOUR RECORD!!!");
         [delegate endRecordingNewGesture];
     }
@@ -170,7 +185,7 @@
             
             if ((startingDot == (count-1)) || (startingDot == (stop-1))) {    //finished drawing
                 
-                CGContextStrokePath(context);
+//                Dot *imagePosition = [self placeImageGivenDot:dot];
                 
                 UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(dot.x, dot.y, 40, 40)] autorelease];
                 UIImage *image = [UIImage imageNamed:[[possibleGesture app] appImageName]];
@@ -183,6 +198,8 @@
                 
                 [appIcons addObject:imageView];
                 [self addSubview:imageView];
+                
+                CGContextStrokePath(context);
                 
             }
             
@@ -255,5 +272,38 @@
     [super dealloc];
     
 }
+
+#pragma mark -
+#pragma mark Interanl Opertations
+
+/**
+ * Returns the image position inside the view
+ *
+ * @param dot The Dot
+ * @return The image position
+ */
+-(Dot *)placeImageGivenDot:(Dot *)dot {
+
+    Dot *result = dot;
+    
+    CGRect frame = self.frame;
+    
+    if (dot.x + 40 > frame.size.width) {
+        
+        result.x = frame.size.width - 40;
+        
+    }
+    
+    if (dot.y + 40 > frame.size.height) {
+        
+        result.y = frame.size.height - 40;
+        
+    }
+    
+    return result;
+
+
+}
+
 
 @end

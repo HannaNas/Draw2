@@ -18,7 +18,7 @@
 /**
  * Defines the error distance allowed
  */
-#define ERROR_DISTANCE                                                  15.0f
+#define ERROR_DISTANCE                                                  SAMPLING_DISTANCE + 7.0f
 
 #pragma mark -
 #pragma mark Colors definition
