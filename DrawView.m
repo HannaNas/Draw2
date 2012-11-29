@@ -12,6 +12,7 @@
 #import "Constants.h"
 #import "Dot.h"
 #import "Gesture.h"
+#import "Tools.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface DrawView ()
@@ -132,7 +133,7 @@
     
     //set up context
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, 10);
+    CGContextSetLineWidth(context, 7);
     CGContextSetStrokeColorWithColor(context, COLOR_GRAY.CGColor);
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineCapRound);
@@ -160,7 +161,7 @@
     
     //finished drawing
     CGContextStrokePath(context);
-        
+    
     for (Gesture *possibleGesture in drawableGestures) {
         
         int startingDot = [userPoints count];
@@ -168,6 +169,21 @@
         int stop = [userPoints count] + 20;
         UIColor *color = [[possibleGesture color] color];
     
+        CGFloat distance = [Tools distanceBetweenPoint:[userPoints objectAtIndex:startingDot-1]
+                                              andPoint:[[possibleGesture gesture] objectAtIndex:startingDot-1]];
+        
+        CGFloat thickness = distance + 1; //(distance * 1.0f)/ERROR_DISTANCE;
+                
+        if (startingDot == 1) {
+            thickness = 7;
+        }
+        
+        if (thickness < 3) thickness = 3;
+        
+        NSLog(@"Thickness %f", thickness);
+        
+        CGContextSetLineWidth(context, thickness);
+
         CGContextSetStrokeColorWithColor(context, color.CGColor);
         
         while (startingDot < count && startingDot < stop) {

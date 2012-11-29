@@ -583,13 +583,8 @@
     }
     
     
-    
-//    if (removeGestureViewController == nil) {
-    
-        removeGestureViewController = [[RemoveGestureViewController alloc] init];
-        removeGestureViewController.delegate = self;
-        
-//    }
+    removeGestureViewController = [[RemoveGestureViewController alloc] init];
+    removeGestureViewController.delegate = self;
     
     [removeGestureViewController setGesturesArray:predefinedGestureArray];
 
@@ -598,8 +593,7 @@
     [self presentViewController:navigationController
                        animated:YES
                      completion:nil];
-//    [self.navigationController pushViewController:removeGestureViewController
-//                                            animated:YES];
+
     
     
 }
