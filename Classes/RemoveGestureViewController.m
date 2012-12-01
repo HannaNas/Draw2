@@ -76,6 +76,13 @@
     // Do any additional setup after loading the view from its nib.
 }
 
+/**
+ * Returns a Boolean value indicating whether the view controller supports the specified orientation.
+ */
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return NO;
+}
+
 #pragma mark -
 #pragma mark Table methods
 
@@ -99,7 +106,7 @@
     UITableViewCell *result = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (result == nil)  {
-        result = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        result = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier] autorelease];
     }
     
     [result setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -128,7 +135,6 @@
     [result addSubview:label];
     
     return result;
-    
 
 }
 

@@ -185,6 +185,13 @@
 
 }
 
+/**
+ * Returns a Boolean value indicating whether the view controller supports the specified orientation.
+ */
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return NO;
+}
+
 
 /**
  * Sent to the view controller when the app receives a memory warning.

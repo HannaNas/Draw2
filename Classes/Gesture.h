@@ -27,6 +27,11 @@
      * The array of Dots
      */
     NSMutableArray *auxGesture;
+    
+    /**
+     * Thickness of the gesture
+     */
+    CGFloat thickness;
 
 }
 
@@ -35,6 +40,8 @@
 @property (nonatomic, readwrite, retain) Color *color;
 
 @property (nonatomic, readonly, retain) NSArray *gesture;
+
+@property (nonatomic, readwrite, assign) CGFloat thickness;
 
 /**
  * Sets the gesture

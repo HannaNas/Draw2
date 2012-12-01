@@ -82,13 +82,19 @@
     
     CGFloat absDx = fabsf(dx);
     CGFloat absDy = fabsf(dy);
-    
-    // Normalized vector
+        
+        // Normalized vector
     CGFloat normVector = sqrtf(absDx*absDx + absDy*absDy);
     
-    // Rx = D1x + d * (1/n) * dx
-    resultDot.x = dotToTranslate.x + distance * (1.0f/normVector)*dx;
-    resultDot.y = dotToTranslate.y + distance * (1.0f/normVector)*dy;
+    if (normVector == 0) {
+        resultDot = dotToTranslate;
+    } else {
+    
+        // Rx = D1x + d * (1/n) * dx
+        resultDot.x = dotToTranslate.x + distance * (1.0f/normVector)*dx;
+        resultDot.y = dotToTranslate.y + distance * (1.0f/normVector)*dy;
+    
+    }
     
     return resultDot;
     

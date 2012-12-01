@@ -43,6 +43,19 @@
                            toDot:(Dot *)dot;
 
 /**
+ * Brings the gesture to star in the user touch
+ *
+ * @param gesture The array of dots
+ * @param dot The reference dot
+ * @param position The position of the reference dot in gesture
+ * @return The gesture translated
+ */
+- (NSArray *)bringPosibleGesture:(NSArray *)gesture
+                           toDot:(Dot *)dot
+                     forPosition:(NSInteger)position;
+
+
+/**
  * Determines if a Dot could be part of a gesture given a position in the gesture array
  *
  * @param dot The dot to check
@@ -72,6 +85,12 @@
  */
 -(void)clean;
 
+
+/**
+ * Calculates the thickness based on the distance error
+ */
+- (CGFloat)thicknessByDistance:(CGFloat)distance;
+
 @end
 
 #pragma mark -
@@ -82,7 +101,7 @@
 #pragma mark Properties
 
 @synthesize viewDraw;
-@synthesize modeSwitch;
+@synthesize modeSwitch = modeSwitch_;
 @synthesize optionsButton;
 
 #pragma mark -
@@ -114,6 +133,9 @@
     [removeGestureViewController release];
     removeGestureViewController = nil;
     
+    [guideGesturesArray release];
+    guideGesturesArray = nil;
+    
     [[NSNotificationCenter defaultCenter] removeObserver:UIApplicationDidBecomeActiveNotification];
     
     [super dealloc];
@@ -122,82 +144,23 @@
 #pragma mark -
 #pragma mark View life cycle
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
+/**
+ * Called after the controller’s view is loaded into memory.
+ */
+ - (void)viewDidLoad {
     
     [super viewDidLoad];
 
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-//    // Gesture 1
-//    Dot *dotG11 = [[[Dot alloc] init] autorelease];
-//    dotG11.x = 50;
-//    dotG11.y = 20;
-//    
-//    Dot *dotG12 = [[[Dot alloc] init] autorelease];
-//    dotG12.x = 50;
-//    dotG12.y = 30;
-//    
-//    Dot *dotG13 = [[[Dot alloc] init] autorelease];
-//    dotG13.x = 50;
-//    dotG13.y = 40;
-//    
-//    Dot *dotG14 = [[[Dot alloc] init] autorelease];
-//    dotG14.x = 50;
-//    dotG14.y = 50;
-//    
-//    // Gesture 2
-//    Dot *dotG21 = [[[Dot alloc] init] autorelease];
-//    dotG21.x = 20;
-//    dotG21.y = 20;
-//    
-//    Dot *dotG22 = [[[Dot alloc] init] autorelease];
-//    dotG22.x = 30;
-//    dotG22.y = 20;
-//    
-//    Dot *dotG23 = [[[Dot alloc] init] autorelease];
-//    dotG23.x = 40;
-//    dotG23.y = 20;
-//    
-//    Dot *dotG24 = [[[Dot alloc] init] autorelease];
-//    dotG24.x = 50;
-//    dotG24.y = 20;
-//    
-//    Dot *dotG25 = [[[Dot alloc] init] autorelease];
-//    dotG25.x = 60;
-//    dotG25.y = 20;
-//    
-//    Dot *dotG26 = [[[Dot alloc] init] autorelease];
-//    dotG26.x = 70;
-//    dotG26.y = 20;
-//    
-//    NSArray *array1 = [[[NSArray alloc] initWithObjects:dotG11, dotG12, dotG13, dotG14, nil] autorelease];
-//    NSArray *array2 = [[[NSArray alloc] initWithObjects:dotG21, dotG22, dotG23, dotG24, dotG25, dotG26, nil] autorelease];
-//    
-//    predefinedGestureArray = [[NSMutableArray alloc] initWithObjects:array1, array2, nil];
-//    
-//    Gesture *gesture1 = [[Gesture alloc] init];
-//    Gesture *gesture2 = [[Gesture alloc] init];
-//    
-//    [gesture1 setName:@"Gesture1"];
-//    [gesture1 setColor:COLOR_BLUE];
-//    [gesture1 setGesture:array1];
-//    
-//    [gesture2 setName:@"Gesture2"];
-//    [gesture2 setColor:COLOR_LILA];
-//    [gesture2 setGesture:array2];
-//    
-//    predefinedGestureArray = [[NSMutableArray alloc] initWithObjects:gesture1, gesture2, nil];
-
     predefinedGestureArray = [[NSMutableArray alloc] init];
     
     userGesture = [[NSMutableArray alloc] init];
     drawableGesturesArray = [[NSMutableArray alloc] init];
-
+    guideGesturesArray = [[NSMutableArray alloc] init];
+     
     optionsButton.layer.cornerRadius = 5.0;
     optionsButton.layer.masksToBounds = YES;
-
-//    viewDraw.delegate = self;
     
 }
 
@@ -210,7 +173,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(clean)
-                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
 
     [super viewWillAppear:animated];
     [self modeSwitch];
@@ -226,7 +190,7 @@
 -(void)viewWillDisappear:(BOOL)animated {
     
     [super viewWillAppear:animated];
-    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil expertMode:expertMode];
     
 }
 
@@ -262,9 +226,13 @@
     
     if (first) {
         
+        timer = CFAbsoluteTimeGetCurrent();
+        expertMode = NO;
+        
         // Cleans the arrays
         [drawableGesturesArray removeAllObjects];
         [userGesture removeAllObjects];
+        [guideGesturesArray removeAllObjects];
         
         // Inits the userGesture with the first dot
         [userGesture addObject:touch];
@@ -284,9 +252,10 @@
                 [gestureMoved setApp:[gesture app]];
                 [gestureMoved setColor:[gesture color]];
                 [gestureMoved setGesture:[[NSArray alloc] initWithArray:array]];
+                [gestureMoved setThickness:GESTURE_THICKNESS];
                 
                 [drawableGesturesArray addObject:gestureMoved];
-            
+                [guideGesturesArray addObject:gestureMoved];
             }
             
         }
@@ -295,6 +264,19 @@
         [self updateDrawableGestures];
         
     } else {
+        
+        double currentTime = CFAbsoluteTimeGetCurrent();
+        double difference = currentTime - timer;
+        
+        timer = currentTime;
+        
+        expertMode = NO;
+
+        if ((difference < EXPERT_TIME) && ([modeSwitch_ selectedSegmentIndex] == 0) ) {
+        
+            expertMode = YES;
+            
+        }
 
         // From the drawableGestures we have to see which one of them are still possible to draw
         [self samplingDotsToNewTouch:touch];
@@ -351,12 +333,13 @@
         [gestureToSave setApp:appName];
         [gestureToSave setColor:color];
         [gestureToSave setGesture:[NSArray arrayWithArray:userGesture]];
+        [gestureToSave setThickness:GESTURE_THICKNESS];
         
         [predefinedGestureArray addObject:gestureToSave];
 
     }
     
-    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil expertMode:expertMode];
     [optionsButton setEnabled:([drawableGesturesArray count] > 0)];
 
 }
@@ -429,6 +412,32 @@
 }
 
 /*
+ * Brings the gesture to star in the user touch
+ */
+- (NSArray *)bringPosibleGesture:(NSArray *)gesture toDot:(Dot *)dot forPosition:(NSInteger)position {
+    
+    NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
+    
+    Dot *dotInGesture = [gesture objectAtIndex:position];
+    
+    NSInteger gestureCount = [gesture count];
+    NSInteger i = 0;
+        
+    while (i < gestureCount) {
+        
+        Dot *translatedDot = [Tools transformFromDot:[gesture objectAtIndex:i] givenDot1:dotInGesture dot2:dot];
+        
+        [result addObject:translatedDot];
+        
+        i++;
+        
+    }
+    
+    return result;
+    
+}
+
+/*
  * Determines if a Dot could be part of a gesture given a position in the gesture array
  */
 - (BOOL)isPossibleDot:(Dot *)dot
@@ -461,8 +470,6 @@
     
     CGFloat distance = [Tools distanceBetweenPoint:[userGesture lastObject] andPoint:dot];
     
-    NSLog(@"distance: %f", distance);
-    
     if (distance ==  SAMPLING_DISTANCE) {
         
         [userGesture addObject:dot];
@@ -477,9 +484,7 @@
         while (i < chunks && !isError) {
             
             Dot *sampleDot = [Tools dotInConstantDistanceFromDot:[userGesture lastObject] toDot:dot];
-            
-            NSLog(@"SampleDot %d (%f, %f)", i, sampleDot.x, sampleDot.y );
-            
+                        
             [userGesture addObject:sampleDot];
             
             [self updateDrawableGestures];
@@ -497,36 +502,56 @@
  */
 - (void)updateDrawableGestures {
 
-    if (modeSwitch.selectedSegmentIndex == 0) {
+    if (modeSwitch_.selectedSegmentIndex == 0) {
     
-        NSLog(@"Try to updateDrawableGestures");
         NSMutableArray *auxDrawableGesturesArray = [[[NSMutableArray alloc] init] autorelease];
-        
+        NSMutableArray *auxGuideGesturesArray = [[[NSMutableArray alloc] init] autorelease];
+
         Dot *lastDot = [userGesture lastObject];
 
-        for (Gesture *gesture in drawableGesturesArray) {
+        for (Gesture *gesture in guideGesturesArray) {//drawableGesturesArray) {
             
             NSArray *array = [gesture gesture];
             
             if ([self isPossibleDot:lastDot inGesture:array forPosition:([userGesture count] - 1)]) {
                 
-                [auxDrawableGesturesArray addObject:gesture];
-                NSLog(@"Gesture admited");
+                [auxGuideGesturesArray addObject:gesture];
+                
+                NSArray *gestureToCheck = [NSArray arrayWithArray:[gesture gesture]];
+                NSArray *array = [self bringPosibleGesture:gestureToCheck
+                                                     toDot:lastDot
+                                               forPosition:([userGesture count] - 1)];
+                                
+                Gesture *gestureMoved = [[[Gesture alloc] init] autorelease];
+                [gestureMoved setApp:[gesture app]];
+                [gestureMoved setColor:[gesture color]];
+                [gestureMoved setGesture:[[NSArray alloc] initWithArray:array]];
+                
+                CGFloat distance = [Tools distanceBetweenPoint:lastDot
+                                                      andPoint:[gestureToCheck objectAtIndex:([userGesture count] - 1)]];
+                
+                CGFloat thickness = [self thicknessByDistance:distance];
+                
+                [gestureMoved setThickness:thickness];
+
+                [auxDrawableGesturesArray addObject:gestureMoved];
                 
             } else {
                 
-                NSLog(@"Gesture discarded");
-                
+                // The gesture is discarded
             }
             
         }
         
+        [guideGesturesArray removeAllObjects];
+        [guideGesturesArray addObjectsFromArray:auxGuideGesturesArray];
+
         [drawableGesturesArray removeAllObjects];
         [drawableGesturesArray addObjectsFromArray:auxDrawableGesturesArray];
         
         
         // Sends to print the getures
-        [viewDraw drawUserGesture:userGesture forPossibleGesutures:drawableGesturesArray];
+        [viewDraw drawUserGesture:userGesture forPossibleGesutures:drawableGesturesArray expertMode:expertMode];
     
         if ([drawableGesturesArray count] == 1) {
             
@@ -534,7 +559,6 @@
                                      
             if ([checkGesture count] == [userGesture count]) {
                 
-                NSLog(@"GESTURE RECOGNIZED!!!");
                 viewDraw.finishRecognizing = YES;
                 
             }
@@ -543,7 +567,7 @@
 
     } else {
         
-        [viewDraw drawUserGesture:userGesture forPossibleGesutures:nil];
+        [viewDraw drawUserGesture:userGesture forPossibleGesutures:nil expertMode:expertMode];
         
     }
     
@@ -555,7 +579,7 @@
  */
 -(void)clean {
 
-    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil expertMode:expertMode];
 
 }
 
@@ -564,10 +588,10 @@
  */
 -(IBAction)modeSwitch {
 
-    viewDraw.recording = (modeSwitch.selectedSegmentIndex == 1);
-    viewDraw.recognizing = (modeSwitch.selectedSegmentIndex == 0);
+    viewDraw.recording = (modeSwitch_.selectedSegmentIndex == 1);
+    viewDraw.recognizing = (modeSwitch_.selectedSegmentIndex == 0);
 
-    [viewDraw drawUserGesture:nil forPossibleGesutures:nil];
+    [viewDraw drawUserGesture:nil forPossibleGesutures:nil expertMode:expertMode];
     
 }
 
@@ -595,6 +619,32 @@
                      completion:nil];
 
     
+    
+}
+
+/**
+ * Calculates the thickness based on the distance error
+ */
+- (CGFloat)thicknessByDistance:(CGFloat)distance {
+    
+    CGFloat result = GESTURE_THICKNESS;
+    
+    CGFloat error = ERROR_DISTANCE;
+    CGFloat sample = (error / 10.0f);
+    
+    if (distance > ERROR_DISTANCE) {
+        result = 0.0f;
+    } else if (distance > (sample * 8)) {
+        result = (result/5)*1;
+    } else if (distance > (sample * 6)) {
+        result = (result/5)*3;
+    } else if (distance > (sample * 4)) {
+        result = (result/5)*3;
+    } else if (distance > (sample * 2)) {
+        result = (result/5)*4;
+    }
+    
+    return result;
     
 }
 

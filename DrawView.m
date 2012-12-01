@@ -56,7 +56,6 @@
 
 	if(event.allTouches.count ==1){
 		
-		//NSLog(@"One Touch");
 		NSArray *touches = [event.allTouches allObjects];
 		CGPoint pointOne = [[touches objectAtIndex:0]locationInView:self];
 
@@ -65,8 +64,6 @@
         Dot *dot = [[Dot alloc]init];
         dot.x = xT;
         dot.y = yT;
-        
-        NSLog(@"FIRST Point (%f, %f)", xT, yT);
         
         [delegate userTouch:dot isFirst:YES];
         [dot release];
@@ -84,7 +81,6 @@
 	
     if ((event.allTouches.count ==1) && !finishRecognizing){
 		
-		//NSLog(@"One Touch");
 		NSArray *touches = [event.allTouches allObjects];
 		CGPoint pointOne = [[touches objectAtIndex:0]locationInView:self];
         
@@ -93,8 +89,6 @@
         Dot *dot = [[Dot alloc]init];
         dot.x = xT;
         dot.y = yT;
-        
-        NSLog(@"touchesMoved Point (%f, %f)", xT, yT);
         
         [delegate userTouch:dot isFirst:NO];
         [dot release];
@@ -112,7 +106,6 @@
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     if (recording && ([userPoints count] > 5)) {
-        NSLog(@"YOU HAVE FINISHED YOUR RECORD!!!");
         [delegate endRecordingNewGesture];
     }
 
@@ -131,106 +124,131 @@
  */
 -(void)drawRect:(CGRect)rect{
     
-    //set up context
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, 7);
-    CGContextSetStrokeColorWithColor(context, COLOR_GRAY.CGColor);
-    CGContextSetLineCap(context, kCGLineCapRound);
-    CGContextSetLineJoin(context, kCGLineCapRound);
-    
-    CGContextSetLineJoin(context, kCGLineJoinRound);
-    
-    CGContextBeginPath(context);
-    
-    for (int i = 0; i<[userPoints count]; i++) {
+    if (!expertModeFlag) {
         
-        Dot *dot = [userPoints objectAtIndex:i];
-       
-        if (i == 0) {
-            CGContextMoveToPoint(context, dot.x, dot.y);
+        //set up context
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetLineWidth(context, 7);
+        CGContextSetStrokeColorWithColor(context, COLOR_GRAY.CGColor);
+        CGContextSetLineCap(context, kCGLineCapRound);
+        CGContextSetLineJoin(context, kCGLineCapRound);
+        
+        CGContextSetLineJoin(context, kCGLineJoinRound);
+        
+        CGContextBeginPath(context);
+        
+        for (int i = 0; i<[userPoints count]; i++) {
             
-            if (i == [userPoints count]) {
-                CGContextAddLineToPoint(context, dot.x, dot.y);
-            }
+            Dot *dot = [userPoints objectAtIndex:i];
             
-        } 
-        else{
-            CGContextAddLineToPoint(context, dot.x, dot.y);
-        }
-    }
-    
-    //finished drawing
-    CGContextStrokePath(context);
-    
-    for (Gesture *possibleGesture in drawableGestures) {
-        
-        int startingDot = [userPoints count];
-        int count = [[possibleGesture gesture] count];
-        int stop = [userPoints count] + 20;
-        UIColor *color = [[possibleGesture color] color];
-    
-        CGFloat distance = [Tools distanceBetweenPoint:[userPoints objectAtIndex:startingDot-1]
-                                              andPoint:[[possibleGesture gesture] objectAtIndex:startingDot-1]];
-        
-        CGFloat thickness = distance + 1; //(distance * 1.0f)/ERROR_DISTANCE;
-                
-        if (startingDot == 1) {
-            thickness = 7;
-        }
-        
-        if (thickness < 3) thickness = 3;
-        
-        NSLog(@"Thickness %f", thickness);
-        
-        CGContextSetLineWidth(context, thickness);
-
-        CGContextSetStrokeColorWithColor(context, color.CGColor);
-        
-        while (startingDot < count && startingDot < stop) {
-            
-            NSArray *array = [possibleGesture gesture];
-            
-            Dot *dot = [array objectAtIndex:startingDot];
-            
-            if (startingDot == [userPoints count]) {
-                CGContextBeginPath(context);
+            if (i == 0) {
                 CGContextMoveToPoint(context, dot.x, dot.y);
-            } else {
+                
+                if (i == [userPoints count]) {
+                    CGContextAddLineToPoint(context, dot.x, dot.y);
+                }
+                
+            }
+            else{
                 CGContextAddLineToPoint(context, dot.x, dot.y);
             }
+        }
+        
+        //finished drawing
+        CGContextStrokePath(context);
+        
+        for (Gesture *possibleGesture in drawableGestures) {
             
-            if ((startingDot == (count-1)) || (startingDot == (stop-1))) {    //finished drawing
+            int startingDot = [userPoints count];
+            int count = [[possibleGesture gesture] count];
+            int stop = [userPoints count] + 20;
+            UIColor *color = [[possibleGesture color] color];
+            
+            CGFloat thickness = [possibleGesture thickness];
+            
+            CGContextSetLineWidth(context, thickness);
+            
+            CGContextSetStrokeColorWithColor(context, color.CGColor);
+            
+            while (startingDot < count && startingDot < stop) {
                 
-//                Dot *imagePosition = [self placeImageGivenDot:dot];
+                NSArray *array = [possibleGesture gesture];
                 
-                UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(dot.x, dot.y, 40, 40)] autorelease];
-                UIImage *image = [UIImage imageNamed:[[possibleGesture app] appImageName]];
+                Dot *dot = [array objectAtIndex:startingDot];
                 
-                [imageView setImage:image];
-                imageView.layer.cornerRadius = 9.0;
-                imageView.layer.masksToBounds = YES;
-                imageView.layer.borderColor = color.CGColor;
-                imageView.layer.borderWidth = 2.0;
+                if (startingDot == [userPoints count]) {
+                    CGContextBeginPath(context);
+                    CGContextMoveToPoint(context, dot.x, dot.y);
+                } else {
+                    CGContextAddLineToPoint(context, dot.x, dot.y);
+                }
                 
-                [appIcons addObject:imageView];
-                [self addSubview:imageView];
+                if ((startingDot == (count-1)) || (startingDot == (stop-1))) {    //finished drawing
+                    
+                    //                Dot *imagePosition = [self placeImageGivenDot:dot];
+                    
+                    UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(dot.x, dot.y, 40, 40)] autorelease];
+                    UIImage *image = [UIImage imageNamed:[[possibleGesture app] appImageName]];
+                    
+                    [imageView setImage:image];
+                    imageView.layer.cornerRadius = 9.0;
+                    imageView.layer.masksToBounds = YES;
+                    imageView.layer.borderColor = color.CGColor;
+                    imageView.layer.borderWidth = 2.0;
+                    
+                    [appIcons addObject:imageView];
+                    [self addSubview:imageView];
+                    
+                    CGContextStrokePath(context);
+                    
+                }
                 
-                CGContextStrokePath(context);
+                startingDot++;
                 
             }
             
-            startingDot++;
+            // Drawing the rest
+            
+            UIColor *color2 = [color colorWithAlphaComponent:0.2];
+            
+            CGContextSetStrokeColorWithColor(context, color2.CGColor);
+            
+            BOOL first = YES;
+            
+            while (startingDot < count) {
+                
+                NSArray *array = [possibleGesture gesture];
+                
+                Dot *dot = [array objectAtIndex:startingDot];
+                
+                if (first) {
+                    first = NO;
+                    CGContextBeginPath(context);
+                    CGContextMoveToPoint(context, dot.x, dot.y);
+                } else {
+                    CGContextAddLineToPoint(context, dot.x, dot.y);
+                }
+                
+                if (startingDot == (count - 1)) {
+                    CGContextStrokePath(context);
+                }
+                
+                startingDot++;
+                
+            }
+            
             
         }
-        
+
     }
     
+      
 }
 
 /*
  * Receives the gesture and posible gestures where the user gesture can be contained and prints them
  */
-- (void)drawUserGesture:(NSArray *)userGesture forPossibleGesutures:(NSArray *)possibleGestures {
+- (void)drawUserGesture:(NSArray *)userGesture forPossibleGesutures:(NSArray *)possibleGestures expertMode:(BOOL)expertMode {
 
     if (userPoints == nil) {
         
@@ -262,6 +280,8 @@
         [imgView removeFromSuperview];
         
     }
+    
+    expertModeFlag = expertMode;
     
     [appIcons removeAllObjects];
     
@@ -318,8 +338,9 @@
     
     return result;
 
-
 }
+
+
 
 
 @end

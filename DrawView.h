@@ -68,6 +68,11 @@
      * App icons
      */
     NSMutableArray *appIcons;
+    
+    /**
+     * Expert mode flag
+     */
+    BOOL expertModeFlag;
 }
 
 /*
@@ -95,8 +100,11 @@
  *
  * @param userGesture The user gesture
  * @param possibleGestures The possible gestures
+ * @param expertMode The expert mode is on or off
  */
-- (void)drawUserGesture:(NSArray *)userGesture forPossibleGesutures:(NSArray *)possibleGestures;
+- (void)drawUserGesture:(NSArray *)userGesture
+   forPossibleGesutures:(NSArray *)possibleGestures
+             expertMode:(BOOL)expertMode;
 
 
 @end

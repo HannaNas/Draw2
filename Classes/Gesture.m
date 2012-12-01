@@ -16,6 +16,7 @@
 @synthesize app;
 @synthesize color;
 @synthesize gesture = auxGesture;
+@synthesize thickness;
 
 #pragma mark Getters and Setters
 

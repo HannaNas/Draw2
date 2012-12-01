@@ -21,6 +21,22 @@
 #define ERROR_DISTANCE                                                  SAMPLING_DISTANCE + 7.0f
 
 #pragma mark -
+#pragma mark Gesture thickness
+
+/**
+ * Gesture thickness
+ */
+#define GESTURE_THICKNESS                                               10.0f
+
+#pragma mark -
+#pragma mark Expert time
+
+/**
+ * Expert time
+ */
+#define EXPERT_TIME                                                     0.015f
+
+#pragma mark -
 #pragma mark Colors definition
 
 /**

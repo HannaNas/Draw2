@@ -23,7 +23,7 @@
     /*
      * Mode switch
      */
-    IBOutlet UISegmentedControl *modeSwitch;
+    IBOutlet UISegmentedControl *modeSwitch_;
     
     /**
      * Options button
@@ -60,6 +60,20 @@
      */
     RemoveGestureViewController *removeGestureViewController;
     
+    /**
+     * Guide gestures array
+     */
+    NSMutableArray *guideGesturesArray;
+    
+    /**
+     * Timer
+     */
+    double timer;
+    
+    /**
+     * Expert mode
+     */
+    BOOL expertMode;
 }
 
 /**
