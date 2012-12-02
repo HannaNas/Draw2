@@ -45,7 +45,7 @@
 @property(nonatomic, readwrite, retain) IBOutlet UITableView *table;
 
 /**
- * Gestures arrayx
+ * Gestures array
  */
 @property(nonatomic, readwrite, retain) NSArray *gesturesArray;
 

@@ -10,6 +10,7 @@
 
 #import "Application.h"
 #import "Color.h"
+#import "Constants.h"
 #import "Gesture.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -125,14 +126,15 @@
     
     [result addSubview:imageView];
     
-    UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(80, 5, 150, 35)] autorelease];
-    label.layer.cornerRadius = 9.0;
-    label.layer.masksToBounds = YES;
-    label.layer.borderColor = [UIColor blackColor].CGColor;
-    label.layer.borderWidth = 1.0;
-    [label setBackgroundColor:[[gesture color] color]];
+    UIView *view = [[[UILabel alloc] initWithFrame:CGRectMake(80, 5, 150, 35)] autorelease];
     
-    [result addSubview:label];
+    view.layer.cornerRadius = 9.0;
+    view.layer.masksToBounds = YES;
+    view.layer.borderColor = [UIColor blackColor].CGColor;
+    view.layer.borderWidth = 1.0;
+    [view setBackgroundColor:[[gesture color] color]];
+    
+    [result addSubview:view];
     
     return result;
 
@@ -158,6 +160,33 @@
         [tableView reloadData];
         
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+
+    return 30.0f;
+    
+}
+// Section header & footer information. Views are preferred over title should you decide to provide both
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+
+    UIView *view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30.0f)] autorelease ];
+    
+    UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30.0f)] autorelease ];
+    
+    [view setBackgroundColor:[UIColor clearColor]];
+    
+    [label setBackgroundColor:COLOR_GRAY];
+    [label setText:@"Swipe left to remove"];
+    [label setTextColor:[UIColor darkGrayColor]];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setFont:[UIFont systemFontOfSize:14]];
+
+    [view addSubview:label];
+    
+    return view;
+
 }
 
 #pragma mark -
