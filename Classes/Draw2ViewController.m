@@ -161,6 +161,9 @@
      
     optionsButton.layer.cornerRadius = 5.0;
     optionsButton.layer.masksToBounds = YES;
+     
+//    finalGesture = [[Gesture alloc] init];
+
     
 }
 
@@ -310,8 +313,8 @@
 // http://mobiledevelopertips.com/cocoa/launching-other-apps-within-an-iphone-application.html
 //    http://wiki.akosma.com/IPhone_URL_Schemes#Facebook
     
-    Gesture *gesture = [drawableGesturesArray objectAtIndex:0];
-    NSString *schema = [[gesture app] schema];
+//    Gesture *gesture = [drawableGesturesArray objectAtIndex:0];
+    NSString *schema = [[finalGesture app] schema];
     
     NSURL *urlString = [NSURL URLWithString:schema];
     
@@ -513,6 +516,7 @@
             
             NSArray *array = [gesture gesture];
             
+            
             if ([self isPossibleDot:lastDot inGesture:array forPosition:([userGesture count] - 1)]) {
                 
                 [auxGuideGesturesArray addObject:gesture];
@@ -551,17 +555,39 @@
         
         
         // Sends to print the getures
-        [viewDraw drawUserGesture:userGesture forPossibleGesutures:drawableGesturesArray expertMode:expertMode];
+        
+
     
         if ([drawableGesturesArray count] == 1) {
             
-            NSArray *checkGesture = [[drawableGesturesArray objectAtIndex:0] gesture];
-                                     
-            if ([checkGesture count] == [userGesture count]) {
+            if (finalGesture != nil) {
+            
+                [finalGesture release];
+                finalGesture = nil;
+                
+            }
+            
+            finalGesture = [[Gesture alloc] init];
+            
+            Gesture *auxGest = [drawableGesturesArray objectAtIndex:0];
+            
+            [finalGesture setColor:[auxGest color]];
+            [finalGesture setApp:[auxGest app]];
+            [finalGesture setGesture:[auxGest gesture]];
+            [finalGesture setThickness:[auxGest thickness]];
+                                    
+            
+            if ([[auxGest gesture] count] == [userGesture count]) {
                 
                 viewDraw.finishRecognizing = YES;
                 
             }
+            
+        }
+        
+        if ([drawableGesturesArray count] > 0) {
+            
+            [viewDraw drawUserGesture:userGesture forPossibleGesutures:drawableGesturesArray expertMode:expertMode];
             
         }
 

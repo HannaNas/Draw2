@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DrawView.h"
+#import "Gesture.h"
 #import "RecordViewController.h"
 #import "RemoveGestureViewController.h"
 #import "Vector.h"
@@ -74,6 +75,11 @@
      * Expert mode
      */
     BOOL expertMode;
+    
+    /**
+     * The final Gesture
+     */
+    Gesture *finalGesture;
 }
 
 /**

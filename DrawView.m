@@ -137,7 +137,18 @@
         
         CGContextBeginPath(context);
         
-        for (int i = 0; i<[userPoints count]; i++) {
+        NSInteger userPointsCount = [userPoints count];
+        
+        if ([drawableGestures count] == 1) {
+        
+            if ([[[drawableGestures objectAtIndex:0] gesture] count] < userPointsCount) {
+                
+                userPointsCount = [[[drawableGestures objectAtIndex:0] gesture] count];
+            }
+        
+        }
+        
+        for (int i = 0; i< userPointsCount; i++) {
             
             Dot *dot = [userPoints objectAtIndex:i];
             
@@ -242,7 +253,6 @@
 
     }
     
-      
 }
 
 /*
