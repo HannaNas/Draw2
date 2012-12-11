@@ -589,6 +589,10 @@
             
             [viewDraw drawUserGesture:userGesture forPossibleGesutures:drawableGesturesArray expertMode:expertMode];
             
+        } else {
+        
+            [viewDraw drawUserGesture:nil forPossibleGesutures:nil expertMode:expertMode];
+        
         }
 
     } else {
