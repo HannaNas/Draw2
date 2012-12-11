@@ -123,14 +123,14 @@
     
     Application *app1 = [[[Application alloc] init] autorelease];
     [app1 setAppName:@"Safari"];
-    [app1 setSchema:@"http://www.u-psud.fr"];
+    [app1 setSchema:@"http://www.lri.fr/~mbl/ENS/FONDIHM/2012/"];
     [app1 setAppImageName:@"Safari.png"];
 
     Application *app2 = [[[Application alloc] init] autorelease];
     [app2 setAppName:@"Maps"];
      NSString *title = @"title";
-     float latitude = 35.4634;
-     float longitude = 9.43425;
+     float latitude = 48.858278;
+     float longitude = 2.294254;
      int zoom = 13;
      NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
     [app2 setSchema:stringURL];
