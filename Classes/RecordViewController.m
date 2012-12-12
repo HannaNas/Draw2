@@ -117,9 +117,9 @@
     [color6 setColorName:@"orange"];
     [color6 setColor:COLOR_ORANGE];
     
-    Color *color7 = [[[Color alloc] init] autorelease];
-    [color7 setColorName:@"ocre"];
-    [color7 setColor:COLOR_PINK];
+//    Color *color7 = [[[Color alloc] init] autorelease];
+//    [color7 setColorName:@"ocre"];
+//    [color7 setColor:COLOR_PINK];
     
     Application *app1 = [[[Application alloc] init] autorelease];
     [app1 setAppName:@"Safari"];
@@ -141,10 +141,10 @@
     [app3 setSchema:@"tel:0695442388"];
     [app3 setAppImageName:@"Phone.jpg"];
 
-    Application *app4 = [[[Application alloc] init] autorelease];
-    [app4 setAppName:@"SMS"];
-    [app4 setSchema:@"sms:0695442388"];
-    [app4 setAppImageName:@"Phone.jpg"];
+//    Application *app4 = [[[Application alloc] init] autorelease];
+//    [app4 setAppName:@"SMS"];
+//    [app4 setSchema:@"sms:0695442388"];
+//    [app4 setAppImageName:@"Phone.jpg"];
 
     Application *app5 = [[[Application alloc] init] autorelease];
     [app5 setAppName:@"Mail"];
@@ -158,11 +158,11 @@
 
     Application *app7 = [[[Application alloc] init] autorelease];
     [app7 setAppName:@"App Store"];
-    [app7 setSchema:@"http://itunes.apple.com/"];
+    [app7 setSchema:@"http://itunes.apple.com/es/app/whatsapp-messenger/id310633997?mt=8"];
     [app7 setAppImageName:@"AppStore.jpg"];
 
-    colorsArray = [[NSMutableArray alloc]initWithObjects: color1, color2, color7, color3, color6, color4, color5, nil];
-    appsArray = [[NSMutableArray alloc]initWithObjects:app1, app2, app3, app4, app5, app6, app7, nil];
+    colorsArray = [[NSMutableArray alloc]initWithObjects: color1, color2, color3, color6, color4, color5, nil];
+    appsArray = [[NSMutableArray alloc]initWithObjects:app1, app2, app3, app5, app6, app7, nil];
     
     availableColorsArray = [[NSMutableArray alloc] initWithArray:colorsArray];
     availableAppsArray = [[NSMutableArray alloc] initWithArray:appsArray];

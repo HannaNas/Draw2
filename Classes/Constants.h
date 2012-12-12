@@ -26,7 +26,7 @@
 /**
  * Gesture thickness
  */
-#define GESTURE_THICKNESS                                               10.0f
+#define GESTURE_THICKNESS                                               16.0f
 
 #pragma mark -
 #pragma mark Expert time

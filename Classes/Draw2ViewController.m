@@ -85,11 +85,15 @@
  */
 -(void)clean;
 
-
 /**
  * Calculates the thickness based on the distance error
  */
 - (CGFloat)thicknessByDistance:(CGFloat)distance;
+
+/**
+ * Determines if a gesture is a subgesture of the already recorded gestures
+ */
+- (BOOL)isGestureSubpathOfOtherGesture:(NSArray *)gesture;
 
 @end
 
@@ -248,7 +252,7 @@
             NSArray *array = [self bringPosibleGesture:gestureToCheck toDot:touch];
             
             CGRect frame = [[self view] frame];
-            
+
             if ([Tools gestureFitsOnScreen:array inRect:&frame]) {
             
                 Gesture *gestureMoved = [[[Gesture alloc] init] autorelease];
@@ -292,17 +296,47 @@
  */
 - (void)endRecordingNewGesture {
 
-    if (recordViewController == nil) {
-        recordViewController = [[RecordViewController alloc]init];
-        recordViewController.delegate = self;
-
+    if ([self isGestureSubpathOfOtherGesture:userGesture]) {
+    
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"The gesture you are trying to record is in conflict with another gesture already recorded.\n\n Please, try record a new gesture."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil, nil];
+        
+        [alert show];
+        [alert release];
+    
+    } else {
+    
+        if ([predefinedGestureArray count] + 1 > 6) {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Information"
+                                                            message:@"All applications are assigned to a gesture.\n\n Delete a gesture from Settings before recording a new one."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil, nil];
+            
+            [alert show];
+            [alert release];
+            
+        } else {
+        
+            if (recordViewController == nil) {
+                recordViewController = [[RecordViewController alloc]init];
+                recordViewController.delegate = self;
+                
+            }
+            
+            [recordViewController setGesturesArray:predefinedGestureArray];
+            
+            UINavigationController *navigationController = [[[UINavigationController alloc]initWithRootViewController:recordViewController] autorelease];
+            [self presentViewController:navigationController animated:YES completion:nil];
+            
+        }
+        
     }
     
-    [recordViewController setGesturesArray:predefinedGestureArray];
-    
-    UINavigationController *navigationController = [[[UINavigationController alloc]initWithRootViewController:recordViewController] autorelease];
-    [self presentViewController:navigationController animated:YES completion:nil];
-
 }
 
 /**
@@ -310,16 +344,36 @@
  */
 - (void)recognitionFinished {
 
-// http://mobiledevelopertips.com/cocoa/launching-other-apps-within-an-iphone-application.html
-//    http://wiki.akosma.com/IPhone_URL_Schemes#Facebook
-    
-//    Gesture *gesture = [drawableGesturesArray objectAtIndex:0];
     NSString *schema = [[finalGesture app] schema];
     
     NSURL *urlString = [NSURL URLWithString:schema];
+        
+    if (![[UIApplication sharedApplication] canOpenURL:urlString]) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Information"
+                                                        message:@"Your device can't open this application."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil, nil];
+        
+        [alert show];
+        [alert release];
+        
+    } else {
     
-    // An the final magic ... openURL!
-    [[UIApplication sharedApplication] openURL:urlString];
+        [[UIApplication sharedApplication] openURL:urlString];
+        
+    }
+    
+}
+
+#pragma mark -
+#pragma mark UIAlertView
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	
+    [self clean];
+
 }
 
 #pragma mark -
@@ -451,7 +505,7 @@
     
     if (position >= [gesture count]) {
         
-        NSLog(@"YOU SHOULD HAVE ALREADY RECOGNIZED THE GESTURE");
+//        NSLog(@"YOU SHOULD HAVE ALREADY RECOGNIZED THE GESTURE");
         
     } else {
     
@@ -678,7 +732,61 @@
     
 }
 
+/**
+ * Determines if a gesture is a subgesture of the already recorded gestures
+ */
+- (BOOL)isGestureSubpathOfOtherGesture:(NSArray *)gesture {
 
+    BOOL result = NO;
+    
+    if ([guideGesturesArray count] > 0) {
+    
+        NSInteger j = 0;
+        
+        while (j < [guideGesturesArray count] && !result) {
+            
+            Gesture *parentGesture = [guideGesturesArray objectAtIndex:j];
+            
+            NSInteger smallerCount = 0;
+            
+            NSArray *parentGestureArray = [parentGesture gesture];
+            
+            if ([parentGestureArray count] > [gesture count]) {
+                smallerCount = [gesture count];
+            } else {
+                smallerCount = [parentGestureArray count];
+            }
+            
+            NSInteger i = 0;
+            NSArray *auxGesture = [self bringPosibleGesture:gesture toDot:[parentGestureArray objectAtIndex:0]];
+            BOOL previousPointsAreNear = YES;
+            
+            while (i < smallerCount && previousPointsAreNear) {
+                
+                CGFloat distance = [Tools distanceBetweenPoint:[auxGesture objectAtIndex:i] andPoint:[parentGestureArray objectAtIndex:i]];
+                
+                CGFloat referenceDistance = SAMPLING_DISTANCE * 1.5f;
+                
+                previousPointsAreNear = (distance < referenceDistance);
+
+                i++;
+                
+            }
+            
+            if (i == smallerCount && previousPointsAreNear) {
+                result = YES;
+            }
+            
+            j++;
+            
+        }
+    
+    
+    }
+    
+    return result;
+
+}
 
 
 
